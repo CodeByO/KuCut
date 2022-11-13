@@ -10,10 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +25,7 @@ import android.widget.Toast;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
+import java.util.Map;
 import java.util.concurrent.Executor;
 import android.content.SharedPreferences;
 import static android.content.Context.MODE_PRIVATE;
@@ -62,8 +66,69 @@ public class SecondFragment  extends Fragment {
         View view = inflater.inflate(R.layout.fragment_second, container, false);
         ImageButton ShowPassword;
         // 각 TextView 가져오기
-        TextView EditProfile;
-        ImageView departmentImage = (ImageView) view.findViewById(R.id.departmentImage);
+        TextView userName = (TextView) view.findViewById(R.id.userName);
+        TextView student_number = (TextView) view.findViewById(R.id.student_number);
+        TextView userid = (TextView) view.findViewById(R.id.userid);
+        TextView userpw = (TextView) view.findViewById(R.id.userpw);
+        TextView department = (TextView) view.findViewById(R.id.department);
+        Button editProfile = (Button) view.findViewById(R.id.editProfile);
+        ImageView collegeImage = (ImageView) view.findViewById(R.id.collegeImage);
+
+        SharedPreferences pref = this.getActivity().getSharedPreferences("pref",MODE_PRIVATE);
+
+        if(pref.getString("userName","").isEmpty()){
+            userName.setText("아직 이름이 없습니다!");
+        }else{
+            userName.setText(pref.getString("userName",""));
+        }
+        if(pref.getString("student_number","").isEmpty()){
+            student_number.setText("학번 : 아직 학번이 없습니다!");
+        }else{
+            student_number.setText("학번 : "+pref.getString("userName",""));
+        }
+        if(pref.getString("userid","").isEmpty()){
+            userid.setText("아이디 : 저장된 아이디가 없습니다!");
+        }else{
+            userid.setText("아이디 : "+pref.getString("userid",""));
+        }
+        if(pref.getString("userpw","").isEmpty()){
+            userpw.setText("비밀번호 : 저장된 비밀번호가 없습니다!");
+        }else{
+            userpw.setText("비밀번호 : "+pref.getString("userpw",""));
+        }
+        if(pref.getString("department","").isEmpty()){
+            department.setText("학번 : 저장된 학번이 없습니다!");
+        }else{
+            department.setText("학번 : "+pref.getString("department",""));
+        }
+        if(pref.getString("college","").isEmpty()){
+            collegeImage.setImageResource(R.mipmap.ic_launcher);
+        }else{
+            String college = pref.getString("college","");
+                if(college == "과학기술대학"){
+                    collegeImage.setImageResource(R.drawable.science);
+                }else if(college == "약학대학"){
+                    collegeImage.setImageResource(R.drawable.madicine);
+                }else if(college == "글로벌비즈니스대학"){
+                    collegeImage.setImageResource(R.drawable.global_bussiness);
+                }else if(college == "공공정책대학"){
+                    collegeImage.setImageResource(R.drawable.public_policy);
+                }else if(college == "문화스포츠대학"){
+                    collegeImage.setImageResource(R.drawable.culture_and_sports);
+                }else if(college == "스마트도시학부"){
+                    collegeImage.setImageResource(R.mipmap.ic_launcher);
+                }else{
+                    collegeImage.setImageResource(R.mipmap.ic_launcher);
+                }
+        }
+
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(),EditProfileActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // 가져온 TextView에서 setText()해서 프로필 업데이트 만약 sharedPreference에 없으면 None을 붙이기
         executor = ContextCompat.getMainExecutor(getContext());
@@ -98,26 +163,6 @@ public class SecondFragment  extends Fragment {
                 .build();
 
 
-
-        ShowPassword = (ImageButton) view.findViewById(R.id.showPassword);
-        EditProfile = (TextView) view.findViewById(R.id.editProfile);
-
-        ShowPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                biometricPrompt.authenticate(promptInfo);
-            }
-        });
-        EditProfile.setOnTouchListener(new View.OnTouchListener(){
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                //EditShortCutActivity 실행
-
-                return false;
-            }
-        });
 
       //바로가기 편집 버튼 제어
         /*

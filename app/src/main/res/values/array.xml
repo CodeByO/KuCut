@@ -45,4 +45,38 @@
         <item>약학대학</item>
         <item>스마트도시학부</item>
     </string-array>
+        <string-array name="departments2">
+
+            <item>학과 선택</item>
+            <item>데이터계산과학전공</item>
+            <item>인공지능사이버보안학과</item>
+            <item>디스플레이·반도체물리학부</item>
+            <item>신소재화학과</item>
+            <item>컴퓨터융합소프트웨어학과</item>
+            <item>전자및정보공학과</item>
+            <item>생명정보공학과</item>
+            <item>식품생명공학과</item>
+            <item>전자·기계융합공학과</item>
+            <item>환경시스템공학과</item>
+            <item>자유공학부</item>
+            <item>미래모빌리티학과</item>
+            <item>지능형반도체공학과</item>
+            <item>정부행정학부</item>
+            <item>공공사회학전공</item>
+            <item>통일외교안보부</item>
+            <item>경제정책학전공</item>
+            <item>빅데이터사이언스학부</item>
+            <item>국제스포츠학부</item>
+            <item>문화유산융합학부</item>
+            <item>문화컨텐츠전공</item>
+            <item>한국학전공</item>
+            <item>중국학전공</item>
+            <item>영미학전공</item>
+            <item>독일학전공</item>
+            <item>글로벌경영전공</item>
+            <item>다지털경영전공</item>
+            <item>표준지식학과</item>
+            <item>약학과</item>
+            <item>스마트도시학부</item>
+        </string-array>
 </resources>

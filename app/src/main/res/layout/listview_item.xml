@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
 
-    <ImageButton
-        android:id="@+id/deleteShortCut"
-        android:layout_width="19dp"
-        android:layout_height="19dp"
-        android:layout_row="0"
-        android:layout_column="4"
-        android:visibility="invisible"
-        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+    <LinearLayout
+        android:layout_width="62dp"
+        android:layout_height="76dp"
+        android:layout_gravity="center"
+        android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_row="1"
-        android:layout_column="3"
-        android:layout_marginRight="10dp"
-        android:src="@mipmap/ic_launcher" />
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/ic_launcher"
+            tools:layout_editor_absoluteX="5dp"
+            tools:layout_editor_absoluteY="16dp" />
 
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:text="text2"
-        android:textSize="10dp"
-        android:textAlignment="center"
-        android:gravity="center_horizontal" />
 
-</GridLayout>
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="text2"
+            android:textAlignment="center"
+            android:textSize="10dp"
+            tools:layout_editor_absoluteX="5dp"
+            tools:layout_editor_absoluteY="66dp" />
+    </LinearLayout>
+</LinearLayout>

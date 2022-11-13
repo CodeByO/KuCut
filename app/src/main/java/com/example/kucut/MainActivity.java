@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter spinnerAdapter;
     //ListView Adapter
     FragmentPagerAdapter adapterViewPager;
+    private long presstime = 0;
 
     // 기본 링크 데이터 DB 등록
     //SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -119,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         //바로가기 편집 버튼 제어
-        /*
+
         final Intent editIntent = new Intent(MainActivity.this, EditShortCutActivity.class);
         editShortCut = (Button) findViewById(R.id.btnEdit);
         editShortCut.setOnClickListener(new View.OnClickListener() {
@@ -129,35 +130,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-         */
+
         //앱 설치 후 최초 실행시 동작(Use SharedPreference
         SharedPreferences pref = getSharedPreferences("pref",MODE_PRIVATE);
 
         if(pref.getString("check","").isEmpty()){
             SharedPreferences.Editor editor = pref.edit();
             //ListItem에 추가될 요소들
-            editor.putString("홈페이지",BasicLink.FeedLink.HOME_PAGE);
-            editor.putString("포탈",BasicLink.FeedLink.PORTAL_PAGE);
-            editor.putString("쿠세움",BasicLink.FeedLink.KUSEUM_PAGE);
-            editor.putString("블랙보드",BasicLink.FeedLink.BLACKBOARD_PAGE);
-            editor.putString("세종 학술 정보원",BasicLink.FeedLink.ACADEMIC_INFO);
-            editor.putString("웹메일",BasicLink.FeedLink.WEB_MAIL);
-            editor.putString("성적조회",BasicLink.FeedLink.GRADE_LOOKUP);
-            editor.putString("학사일정",BasicLink.FeedLink.ACADEMIC_CALENDAR);
-            editor.putString("증성서 신청",BasicLink.FeedLink.CERTIFICATE_APPLICATION);
-            editor.putString("참여마당",BasicLink.FeedLink.PARTICIPATION_YARD);
-            editor.putString("세종학생 상담센터",BasicLink.FeedLink.COUNSELING_CENTER);
-            editor.putString("교수학습 지원센터",BasicLink.FeedLink.TEACHING_LEARNING);
-            editor.putString("세종창업 교육센터",BasicLink.FeedLink.ENTREPRENEURSHIP_EDUCATION);
-            editor.putString("대학 일자리 센터",BasicLink.FeedLink.JOB_CENTER);
-            editor.putString("세종 사회 봉사단",BasicLink.FeedLink.COMMUNITY_SERVICE);
-            editor.putString("호연학사",BasicLink.FeedLink.DORMITORY_PAGE);
-            editor.putString("학사 일반 공지",BasicLink.FeedLink.GENERAL_NOTICE);
-            editor.putString("교내 행사 공지",BasicLink.FeedLink.EVENT_NOTICE);
-            editor.putString("코로나 19 공지",BasicLink.FeedLink.COVID19_NOTICE);
-            editor.putString("열람실 현황/배정",BasicLink.FeedLink.READING_ROOM);
-            editor.putString("셔틀버스 시간표",BasicLink.FeedLink.SHUTTLE_BUS);
-            editor.putString("교내 식당 식단표",BasicLink.FeedLink.CAMPUS_CAFETERIA);
+            editor.putString("홈페이지_**",BasicLink.FeedLink.HOME_PAGE);
+            editor.putString("포탈_**",BasicLink.FeedLink.PORTAL_PAGE);
+            editor.putString("쿠세움_**",BasicLink.FeedLink.KUSEUM_PAGE);
+            editor.putString("블랙보드_**",BasicLink.FeedLink.BLACKBOARD_PAGE);
+            editor.putString("세종 학술 정보원_**",BasicLink.FeedLink.ACADEMIC_INFO);
+            editor.putString("웹메일_**",BasicLink.FeedLink.WEB_MAIL);
+            editor.putString("성적조회_**",BasicLink.FeedLink.GRADE_LOOKUP);
+            editor.putString("학사일정_**",BasicLink.FeedLink.ACADEMIC_CALENDAR);
+            editor.putString("증성서 신청_**",BasicLink.FeedLink.CERTIFICATE_APPLICATION);
+            editor.putString("참여마당_**",BasicLink.FeedLink.PARTICIPATION_YARD);
+            editor.putString("세종학생 상담센터_**",BasicLink.FeedLink.COUNSELING_CENTER);
+            editor.putString("교수학습 지원센터_**",BasicLink.FeedLink.TEACHING_LEARNING);
+            editor.putString("세종창업 교육센터_**",BasicLink.FeedLink.ENTREPRENEURSHIP_EDUCATION);
+            editor.putString("대학 일자리 센터_**",BasicLink.FeedLink.JOB_CENTER);
+            editor.putString("세종 사회 봉사단_**",BasicLink.FeedLink.COMMUNITY_SERVICE);
+            editor.putString("호연학사_**",BasicLink.FeedLink.DORMITORY_PAGE);
+            editor.putString("학사 일반 공지_**",BasicLink.FeedLink.GENERAL_NOTICE);
+            editor.putString("교내 행사 공지_**",BasicLink.FeedLink.EVENT_NOTICE);
+            editor.putString("코로나 19 공지_**",BasicLink.FeedLink.COVID19_NOTICE);
+            editor.putString("열람실 현황/배정_**",BasicLink.FeedLink.READING_ROOM);
+            editor.putString("셔틀버스 시간표_**",BasicLink.FeedLink.SHUTTLE_BUS);
+            editor.putString("교내 식당 식단표_**",BasicLink.FeedLink.CAMPUS_CAFETERIA);
 
             //Spinner에 추가될 요소들
             editor.putString("데이터계산과학전공",BasicLink.DepartmentLink.DATA_CALCULATE);
@@ -287,20 +288,14 @@ public class MainActivity extends AppCompatActivity {
     //하단 뒤로 가기 버튼 제어
     @Override
     public void onBackPressed() {
-        long finishtimeed = 1000;
-        long presstime = 0;
-        long tempTime = System.currentTimeMillis();
-        long intervalTime = tempTime - presstime;
 
-        if (0 <= intervalTime && finishtimeed >= intervalTime)
-        {
-            android.os.Process.killProcess(android.os.Process.myPid());
-            finish();
-        }
-        else
-        {
-            presstime = tempTime;
+        if(System.currentTimeMillis() > presstime + 2000){
+            presstime = System.currentTimeMillis();
             Toast.makeText(getApplicationContext(), "한번더 누르시면 앱이 종료됩니다", Toast.LENGTH_SHORT).show();
+            return;
+       }
+        if((System.currentTimeMillis() <= presstime + 2000)){
+            finish();
         }
     }
     //swap 뷰 어댑터

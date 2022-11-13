@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/edit_listView"
+    <GridView
+        android:id="@+id/edit_gridView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="30dp"
@@ -15,6 +15,7 @@
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginBottom="27dp"
+        android:numColumns="5"
         android:background=" @drawable/shortcut_back"
         app:layout_constraintBottom_toTopOf="@+id/btnNewShortCut"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,7 +39,7 @@
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_listView" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_gridView" />
 
     <TextView
         android:id="@+id/textView2"

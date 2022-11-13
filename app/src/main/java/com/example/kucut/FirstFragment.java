@@ -6,21 +6,26 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
         import androidx.fragment.app.Fragment;
-        import android.view.LayoutInflater;
+
+import android.util.Log;
+import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.Map;
 
 
 public class FirstFragment extends Fragment {
     // Store instance variables
     private String title;
     private int page;
-
+    private GridView gridView = null;
    // SharedPreferences pref = getActivity().getSharedPreferences("pref",Context.MODE_PRIVATE);
    // SharedPreferences.Editor editor = pref.edit();
    // SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
@@ -49,14 +54,22 @@ public class FirstFragment extends Fragment {
                              Bundle savedInstanceState) {
         SharedPreferences pref = getActivity().getSharedPreferences("pref",Context.MODE_PRIVATE);
         View view = inflater.inflate(R.layout.fragment_first, container, false);
-        ListView listView = (ListView) view.findViewById(R.id.listView);
+        GridView gridView = (GridView) view.findViewById(R.id.gridView);
         ListItemAdapter adapter = new ListItemAdapter();
+
+
+
+        Map<String,?> keys = pref.getAll();
+        for(Map.Entry<String,?> entry : keys.entrySet()){
+            if(entry.getKey().endsWith("_**")){
+                adapter.addItem(new ListItem(entry.getKey().replace("_**",""), (String)entry.getValue()));
+            }
+
+        }
+
         // SharedPreferences에서 모든 데이터 값을 가져와 정규식 이용 조건(한글만, 학과,학부,전공,과 문자 제외
-        adapter.addItem(new ListItem("김김김", "http://wwww.aaaa.com"));
-        adapter.addItem(new ListItem("포탈",pref.getString("포탈","")));
-        adapter.addItem(new ListItem("쿠세움",pref.getString("쿠세움","")));
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gridView.setAdapter(adapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 final ListItem item = (ListItem) adapter.getItem(i);

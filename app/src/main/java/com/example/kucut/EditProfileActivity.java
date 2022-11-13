@@ -1,11 +1,18 @@
 package com.example.kucut;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,7 +31,17 @@ public class EditProfileActivity extends AppCompatActivity {
     private BiometricPrompt.PromptInfo promptInfo;
 
     Button Btn_confirm; //확인 버튼
-    ImageButton ShowPassword; //비밀번호 확인(지문인식)
+    EditText editUserName;
+    EditText editUserid;
+    EditText editUserpw;
+    EditText editStudentNumber;
+
+
+    Spinner collegeSpinner;
+    ArrayAdapter collegeSpinnerAdapter;
+
+    Spinner departmentSpinner;
+    ArrayAdapter departmentSpinnerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -33,9 +50,72 @@ public class EditProfileActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("프로필 수정");
         actionBar.setDisplayHomeAsUpEnabled(true);
+        editUserName = findViewById(R.id.editUserName);
+        editUserid = findViewById(R.id.editUserid);
+        editUserpw = findViewById(R.id.editUserpw);
+        editStudentNumber = findViewById(R.id.editStudentNumber);
+
 
         Btn_confirm = (Button) findViewById(R.id.btnConfirm);
-        ShowPassword = (ImageButton) findViewById(R.id.btn_show_password);
+        SharedPreferences pref = getSharedPreferences("pref",MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        String[] collegeItems = getResources().getStringArray(R.array.colleges);
+        String[] departmentItems = getResources().getStringArray(R.array.departments2);
+        collegeSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item,collegeItems);
+        collegeSpinner = (Spinner) findViewById(R.id.collegeSpinner);
+        collegeSpinner.setAdapter(collegeSpinnerAdapter);
+
+
+        departmentSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item,departmentItems);
+        departmentSpinner = (Spinner) findViewById(R.id.departmentSpinner2);
+        departmentSpinner.setAdapter(departmentSpinnerAdapter);
+
+        Btn_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                collegeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        SharedPreferences pref = getSharedPreferences("pref",MODE_PRIVATE);
+                        final String selectedText = (String) adapterView.getItemAtPosition(i);
+                        editor.putString("college",selectedText);
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+                departmentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        SharedPreferences pref = getSharedPreferences("pref",MODE_PRIVATE);
+                        final String selectedText = (String) adapterView.getItemAtPosition(i);
+                        editor.putString("department",selectedText);
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+
+                editor.putString("userid",editUserid.getText().toString());
+                editor.putString("userpw",editUserpw.getText().toString());
+                editor.putString("userName",editUserName.getText().toString());
+                editor.putString("studentNumber",editStudentNumber.getText().toString());
+                editor.apply();
+                Intent intent = new Intent(EditProfileActivity.this,MainActivity.class);
+                startActivity(intent);
+            }
+
+        });
+
+
+
         executor = ContextCompat.getMainExecutor(this);
         biometricPrompt = new BiometricPrompt(this,
                 executor, new BiometricPrompt.AuthenticationCallback() {
@@ -66,13 +146,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 .setNegativeButtonText("취소")
                 .setDeviceCredentialAllowed(false)
                 .build();
-
-        ShowPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                biometricPrompt.authenticate(promptInfo);
-            }
-        });
 
         Btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override

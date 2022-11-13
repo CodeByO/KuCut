@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,129 +7,195 @@
 
 
     <Spinner
-        android:id="@+id/collegeSpinner"
-        android:layout_width="327dp"
-        android:layout_height="50dp"
+        android:id="@+id/departmentSpinner2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_centerHorizontal="true"
 
+        android:layout_marginStart="41dp"
+        android:layout_marginLeft="41dp"
+        android:layout_marginEnd="41dp"
+        android:layout_marginRight="41dp"
+        android:layout_marginBottom="15dp"
         android:background="@drawable/spinner_background"
         android:spinnerMode="dialog"
-        tools:layout_editor_absoluteX="42dp"
-        tools:layout_editor_absoluteY="46dp" />
+        app:layout_constraintBottom_toTopOf="@+id/title_studentNumber"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_department" />
+
+    <Spinner
+        android:id="@+id/collegeSpinner"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true"
+
+        android:layout_marginStart="41dp"
+        android:layout_marginLeft="41dp"
+        android:layout_marginEnd="41dp"
+        android:layout_marginRight="41dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/spinner_background"
+        android:spinnerMode="dialog"
+        app:layout_constraintBottom_toTopOf="@+id/title_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="8dp"
         android:text="단과대 아이콘"
-        tools:layout_editor_absoluteX="17dp"
-        tools:layout_editor_absoluteY="18dp" />
+        app:layout_constraintBottom_toTopOf="@+id/collegeSpinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/title_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="이름"
-        tools:layout_editor_absoluteX="19dp"
-        tools:layout_editor_absoluteY="112dp" />
+        app:layout_constraintBottom_toTopOf="@+id/editUserName"
+        app:layout_constraintEnd_toStartOf="@+id/editUserName"
+        app:layout_constraintStart_toStartOf="@+id/editUserName"
+        app:layout_constraintTop_toBottomOf="@+id/collegeSpinner" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
-        android:layout_width="342dp"
-        android:layout_height="41dp"
+        android:id="@+id/editUserName"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="23dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Name"
-        tools:layout_editor_absoluteX="37dp"
-        tools:layout_editor_absoluteY="146dp" />
+        app:layout_constraintBottom_toTopOf="@+id/title_department"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_name" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName6"
-        android:layout_width="342dp"
-        android:layout_height="41dp"
+        android:id="@+id/editUserid"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginLeft="22dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginRight="22dp"
+        android:layout_marginBottom="16dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Name"
-        tools:layout_editor_absoluteX="42dp"
-        tools:layout_editor_absoluteY="252dp" />
-
-    <Spinner
-        android:id="@+id/departmentSpinner"
-        android:layout_width="342dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-
-        android:background="@drawable/spinner_background"
-        android:spinnerMode="dialog"
-        tools:layout_editor_absoluteX="42dp"
-        tools:layout_editor_absoluteY="352dp" />
+        app:layout_constraintBottom_toTopOf="@+id/title_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_userid" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName8"
-        android:layout_width="342dp"
-        android:layout_height="41dp"
+        android:id="@+id/editUserpw"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="23dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Name"
-        tools:layout_editor_absoluteX="42dp"
-        tools:layout_editor_absoluteY="457dp" />
-
-    <EditText
-        android:id="@+id/editTextTextPersonName9"
-        android:layout_width="342dp"
-        android:layout_height="41dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
-        tools:layout_editor_absoluteX="37dp"
-        tools:layout_editor_absoluteY="566dp" />
+        app:layout_constraintBottom_toTopOf="@+id/btnConfirm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_password" />
 
     <TextView
         android:id="@+id/title_department"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="21dp"
+        android:layout_marginLeft="21dp"
+        android:layout_marginBottom="12dp"
         android:text="학과"
-        tools:layout_editor_absoluteX="21dp"
-        tools:layout_editor_absoluteY="210dp" />
+        app:layout_constraintBottom_toTopOf="@+id/departmentSpinner2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editUserName" />
 
     <TextView
         android:id="@+id/title_studentNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="21dp"
+        android:layout_marginLeft="21dp"
+        android:layout_marginBottom="15dp"
         android:text="학번"
-        tools:layout_editor_absoluteX="21dp"
-        tools:layout_editor_absoluteY="317dp" />
+        app:layout_constraintBottom_toTopOf="@+id/editStudentNumber"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/departmentSpinner2" />
 
     <TextView
         android:id="@+id/title_userid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="21dp"
+        android:layout_marginLeft="21dp"
+        android:layout_marginBottom="16dp"
         android:text="아이디"
-        tools:layout_editor_absoluteX="21dp"
-        tools:layout_editor_absoluteY="422dp" />
+        app:layout_constraintBottom_toTopOf="@+id/editUserid"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editStudentNumber" />
 
     <TextView
         android:id="@+id/title_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="21dp"
+        android:layout_marginLeft="21dp"
+        android:layout_marginBottom="10dp"
         android:text="비밀번호"
-        tools:layout_editor_absoluteX="21dp"
-        tools:layout_editor_absoluteY="531dp" />
+        app:layout_constraintBottom_toTopOf="@+id/editUserpw"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editUserid" />
+
 
     <Button
         android:id="@+id/btnConfirm"
-        android:layout_width="273dp"
-        android:layout_height="41dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginLeft="68dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginRight="68dp"
+        android:layout_marginBottom="119dp"
         android:text="Button"
-        tools:layout_editor_absoluteX="69dp"
-        tools:layout_editor_absoluteY="642dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editUserpw" />
 
-    <ImageButton
-        android:id="@+id/btn_show_password"
-        android:layout_width="30dp"
-        android:layout_height="22dp"
-        app:srcCompat="@android:drawable/ic_menu_view"
-        tools:layout_editor_absoluteX="73dp"
-        tools:layout_editor_absoluteY="531dp" />
+    <EditText
+        android:id="@+id/editStudentNumber"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="18dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/title_userid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_studentNumber" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
