@@ -1,6 +1,8 @@
 package com.example.kucut;
 
 import com.example.kucut.SqlHandle;
+
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,7 +32,7 @@ public class EditShortCutActivity extends AppCompatActivity {
     Button NewShortCut;
     GridView gridView;
     ListItemAdapter adapter;
-
+    Dialog NewShortCutDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -46,7 +49,9 @@ public class EditShortCutActivity extends AppCompatActivity {
         gridView = (GridView) findViewById(R.id.edit_gridView);
         adapter = new ListItemAdapter();
 
-
+        NewShortCutDialog = new Dialog(EditShortCutActivity.this);
+        NewShortCutDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        NewShortCutDialog.setContentView(R.layout.new_shortcut_dialog);
 
 
 
@@ -85,45 +90,39 @@ public class EditShortCutActivity extends AppCompatActivity {
 
 
     }
+
     public void showNewShortCutDialog(SharedPreferences.Editor editor) {
-        final EditText NewName  = new EditText(getApplicationContext());
-        final EditText NewLink = new EditText(getApplicationContext());
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("새로운 바로가기");
-        builder.setMessage("이름");
-        builder.setView(NewName);
-        builder.setMessage("주소");
-        builder.setView(NewLink);
-        builder.setPositiveButton("확인",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        GridView gridView = (GridView) findViewById(R.id.gridView);
-                        ListItemAdapter adapter = new ListItemAdapter();
-                        // FirstFragment와 동일하게 추가
-                        //대신 삭제 버튼 보이게 하고
-                        if(adapter.getCount() <= 25){
-                            String name = NewName.getText().toString();
-                            name = name+"_**";
-                            editor.putString(name,NewLink.getText().toString());
-                            adapter.addItem(new ListItem(NewName.getText().toString(), NewLink.getText().toString()));
-                            Toast.makeText(getApplicationContext(), "확인", Toast.LENGTH_LONG).show();
-                            editor.apply();
-                        }else{
-                            Toast.makeText(getApplicationContext(),"더 이상 추가가 불가능합니다.",Toast.LENGTH_SHORT).show();
-                        }
-                        dialog.dismiss();
-
-                    }
-                });
-        builder.setNegativeButton("취소",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        builder.show();
+        NewShortCutDialog.show();
+        Button confirm = (Button) findViewById(R.id.addNewShortCutBtn);
+        Button cancel = (Button) findViewById(R.id.btn_cancel);
+        EditText NewName = (EditText) findViewById(R.id.shortcut_name);
+        EditText NewLink = (EditText) findViewById(R.id.shortcut_link);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(adapter.getCount() <= 25){
+                    String name = NewName.getText().toString();
+                    name = name+"_**";
+                    editor.putString(name,NewLink.getText().toString());
+                    adapter.addItem(new ListItem(NewName.getText().toString(), NewLink.getText().toString()));
+                    Toast.makeText(getApplicationContext(), "새로운 바로가기가 등록되었습니다.", Toast.LENGTH_LONG).show();
+                    editor.apply();
+                }else{
+                    Toast.makeText(getApplicationContext(),"더 이상 추가가 불가능합니다.",Toast.LENGTH_SHORT).show();
+                }
+                NewShortCutDialog.dismiss();
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NewShortCutDialog.dismiss();
+            }
+        });
     }
+
+
     public void showDeleteDialog(String ShortCutName,SharedPreferences.Editor editor,ListItem item,ListItemAdapter adapter) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -138,7 +137,8 @@ public class EditShortCutActivity extends AppCompatActivity {
                         editor.apply();
                         adapter.removeItem(item);
 
-
+                        Intent intent = new Intent(EditShortCutActivity.this,MainActivity.class);
+                        startActivity(intent);
                     }
                 });
         builder.setNegativeButton("취소",
