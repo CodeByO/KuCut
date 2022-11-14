@@ -43,10 +43,10 @@
         android:id="@+id/department"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="94dp"
+        android:layout_marginTop="93dp"
         android:layout_marginEnd="12dp"
         android:layout_marginRight="12dp"
-        android:layout_marginBottom="95dp"
+        android:layout_marginBottom="94dp"
         android:text="인공지능사이버보안전공"
         android:textSize="14dp"
         app:layout_constraintBottom_toTopOf="@+id/student_number"
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginLeft="25dp"
-        android:layout_marginBottom="37dp"
+        android:layout_marginBottom="38dp"
         android:text="학번 : "
         android:textColor="#000000"
         android:textSize="15dp"
@@ -73,40 +73,43 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginLeft="25dp"
-        android:layout_marginBottom="29dp"
+        android:layout_marginBottom="51dp"
         android:text="아이디 : "
-        android:textColor="#000000"
-        android:textSize="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/userpw"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/student_number" />
-
-    <TextView
-        android:id="@+id/userpw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginLeft="25dp"
-        android:text="비밀번호 : "
         android:textColor="#000000"
         android:textSize="15dp"
         app:layout_constraintBottom_toTopOf="@+id/editProfile"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userid" />
+        app:layout_constraintTop_toBottomOf="@+id/student_number" />
 
     <Button
         android:id="@+id/editProfile"
-        android:layout_width="91dp"
-        android:layout_height="47dp"
-        android:layout_marginBottom="35dp"
+        android:layout_width="111dp"
+        android:layout_height="59dp"
+        android:layout_marginEnd="99dp"
+        android:layout_marginRight="99dp"
+        android:layout_marginBottom="33dp"
         android:text="수정"
         android:textColor="#0275d8"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userpw" />
+        app:layout_constraintStart_toEndOf="@+id/confirmPassword"
+        app:layout_constraintTop_toBottomOf="@+id/userid" />
+
+    <Button
+        android:id="@+id/confirmPassword"
+        android:layout_width="85dp"
+        android:layout_height="68dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginLeft="43dp"
+        android:layout_marginEnd="31dp"
+        android:layout_marginRight="31dp"
+        android:layout_marginBottom="20dp"
+        android:text="비밀번호 확인"
+        android:textColor="#0275d8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/editProfile"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

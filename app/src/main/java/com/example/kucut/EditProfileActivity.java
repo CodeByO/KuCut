@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -36,7 +39,7 @@ public class EditProfileActivity extends AppCompatActivity {
     EditText editUserid;
     EditText editUserpw;
     EditText editStudentNumber;
-
+    Button btnEditProfilePasswordVisible;
 
     Spinner collegeSpinner;
     ArrayAdapter collegeSpinnerAdapter;
@@ -54,23 +57,36 @@ public class EditProfileActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         editUserName = findViewById(R.id.editUserName);
         editUserid = findViewById(R.id.editUserid);
-        editUserpw = findViewById(R.id.editUserpw);
         editStudentNumber = findViewById(R.id.editStudentNumber);
-
+        btnEditProfilePasswordVisible = findViewById(R.id.btnEditProfilePasswordVisible);
 
         Btn_confirm = (Button) findViewById(R.id.btnEditProfileConfirm);
         SharedPreferences pref = getSharedPreferences("pref",MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         String[] collegeItems = getResources().getStringArray(R.array.colleges);
         String[] departmentItems = getResources().getStringArray(R.array.departments2);
+        List<String> collegeList = Arrays.asList(getResources().getStringArray(R.array.colleges));
+        List<String> departmentList = Arrays.asList(getResources().getStringArray(R.array.departments));
         collegeSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item,collegeItems);
         collegeSpinner = (Spinner) findViewById(R.id.collegeSpinner);
         collegeSpinner.setAdapter(collegeSpinnerAdapter);
 
+        editUserid.setText(pref.getString("userid",""));
+        editUserName.setText(pref.getString("userName",""));
+        editStudentNumber.setText(pref.getString("studentNumber",""));
 
         departmentSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item,departmentItems);
         departmentSpinner = (Spinner) findViewById(R.id.departmentSpinner2);
         departmentSpinner.setAdapter(departmentSpinnerAdapter);
+        if(!pref.getString("department","").isEmpty()){
+            int index = departmentList.indexOf(pref.getString("department",""));
+
+            departmentSpinner.setSelection(index);
+        }
+        if(!pref.getString("college","").isEmpty()){
+            int index = collegeList.indexOf(pref.getString("college",""));
+            collegeSpinner.setSelection(index);
+        }
         collegeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -108,7 +124,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
                 editor.putString("userid",editUserid.getText().toString());
-                editor.putString("userpw",editUserpw.getText().toString());
                 editor.putString("userName",editUserName.getText().toString());
                 Log.d("studentNumber : ",editStudentNumber.getText().toString() );
                 editor.putString("studentNumber",editStudentNumber.getText().toString());
@@ -156,30 +171,33 @@ public class EditProfileActivity extends AppCompatActivity {
                 .setDeviceCredentialAllowed(false)
                 .build();
 
+        btnEditProfilePasswordVisible.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                biometricPrompt.authenticate(promptInfo);
+            }
+        });
     }
     public void showPasswordDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("비밀번호");
         //입력창 및 기본 값 추가;
-        /*
-            final EditText et = new EditText(getApplicationContext());
-            .setVIew(et);
-            et.setText(password);
-            확인 버튼 틀릭시
-            et.getText().toString();
-            디비에 업데이트
-         */
-        builder.setMessage("확인하였습니까?");
+        SharedPreferences pref = getSharedPreferences("pref",MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        final TextView vi = new TextView(this);
+        final EditText et = new EditText(this);
+        et.setText(pref.getString("userpw",""));
+        builder.setView(vi);
+        builder.setView(et);
         builder.setPositiveButton("확인",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(getApplicationContext(), "확인", Toast.LENGTH_LONG).show();
-                    }
-                });
-        builder.setNegativeButton("취소",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(), "취소", Toast.LENGTH_LONG).show();
+                        //EditText에 있는 password 가져와서 SharedPreference에 저장
+                        if(!et.getText().toString().equals(pref.getString("userpw",""))){
+                            editor.putString("userpw",et.getText().toString());
+                            editor.apply();
+                        }
                     }
                 });
         builder.show();

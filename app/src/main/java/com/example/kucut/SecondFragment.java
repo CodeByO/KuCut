@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -69,11 +70,10 @@ public class SecondFragment  extends Fragment {
         TextView userName = (TextView) view.findViewById(R.id.userName);
         TextView student_number = (TextView) view.findViewById(R.id.student_number);
         TextView userid = (TextView) view.findViewById(R.id.userid);
-        TextView userpw = (TextView) view.findViewById(R.id.userpw);
         TextView department = (TextView) view.findViewById(R.id.department);
         Button editProfile = (Button) view.findViewById(R.id.editProfile);
         ImageView collegeImage = (ImageView) view.findViewById(R.id.collegeImage);
-
+        Button confirmPassword = (Button) view.findViewById(R.id.confirmPassword);
         SharedPreferences pref = this.getActivity().getSharedPreferences("pref",MODE_PRIVATE);
 
         if(pref.getString("userName","").isEmpty()){
@@ -90,11 +90,6 @@ public class SecondFragment  extends Fragment {
             userid.setText("아이디 : 저장된 아이디가 없습니다!");
         }else{
             userid.setText("아이디 : "+pref.getString("userid",""));
-        }
-        if(pref.getString("userpw","").isEmpty()){
-            userpw.setText("비밀번호 : 저장된 비밀번호가 없습니다!");
-        }else{
-            userpw.setText("비밀번호 : "+pref.getString("userpw",""));
         }
         if(pref.getString("department","").isEmpty()){
             department.setText("저장된 학과가 없습니다!");
@@ -162,56 +157,37 @@ public class SecondFragment  extends Fragment {
                 .setNegativeButtonText("취소")
                 .setDeviceCredentialAllowed(false)
                 .build();
-
-
-
-      //바로가기 편집 버튼 제어
-        /*
-        final Intent editIntent = new Intent(MainActivity.this, EditShortCutActivity.class);
-        editShortCut = (Button) findViewById(R.id.btnEdit);
-        editShortCut.setOnClickListener(new View.OnClickListener() {
+        confirmPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(editIntent);
-            }
-        });
-        final Intent profileIntent = new Intent(MainActivity.this, EditProfileActivity.class);
-        EditProfile = (TextView) findViewById(R.id.editProfile);
-        EditProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(profileIntent);
+                biometricPrompt.authenticate(promptInfo);
             }
         });
 
-         */
+
+
         return view;
     }
     // 지문 인식 통과 후 수정 및 확인 다이알로그
     public void showPasswordDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
         builder.setTitle("비밀번호");
         //입력창 및 기본 값 추가;
-        /*
-            final EditText et = new EditText(getApplicationContext());
-            .setVIew(et);
-            et.setText(password);
-            확인 버튼 틀릭시
-            et.getText().toString();
-            디비에 업데이트
-         */
-        builder.setMessage("확인하였습니까?");
+        SharedPreferences pref = this.getActivity().getSharedPreferences("pref",MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        final TextView vi = new TextView(this.getActivity());
+        final EditText et = new EditText(this.getActivity());
+        et.setText(pref.getString("userpw",""));
+        builder.setView(vi);
+        builder.setView(et);
         builder.setPositiveButton("확인",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getContext(), "확인", Toast.LENGTH_LONG).show();
                         //EditText에 있는 password 가져와서 SharedPreference에 저장
-                    }
-                });
-        builder.setNegativeButton("취소",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getContext(), "취소", Toast.LENGTH_LONG).show();
+                        if(!et.getText().toString().equals(pref.getString("userpw",""))){
+                            editor.putString("userpw",et.getText().toString());
+                            editor.apply();
+                        }
                     }
                 });
         builder.show();
