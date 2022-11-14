@@ -93,25 +93,31 @@ public class EditShortCutActivity extends AppCompatActivity {
 
     public void showNewShortCutDialog(SharedPreferences.Editor editor) {
 
-        NewShortCutDialog.show();
-        Button confirm = (Button) findViewById(R.id.addNewShortCutBtn);
-        Button cancel = (Button) findViewById(R.id.btn_cancel);
-        EditText NewName = (EditText) findViewById(R.id.shortcut_name);
-        EditText NewLink = (EditText) findViewById(R.id.shortcut_link);
+
+        Button confirm = (Button) NewShortCutDialog.findViewById(R.id.addNewShortCutBtn);
+        Button cancel = (Button) NewShortCutDialog.findViewById(R.id.cancelNewShortCutBtn);
+        EditText NewName = (EditText) NewShortCutDialog.findViewById(R.id.shortcut_name);
+        EditText NewLink = (EditText) NewShortCutDialog.findViewById(R.id.shortcut_link);
+
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(adapter.getCount() <= 25){
+                    SharedPreferences.Editor ed = editor;
                     String name = NewName.getText().toString();
                     name = name+"_**";
-                    editor.putString(name,NewLink.getText().toString());
+                    ed.putString(name,NewLink.getText().toString());
                     adapter.addItem(new ListItem(NewName.getText().toString(), NewLink.getText().toString()));
                     Toast.makeText(getApplicationContext(), "새로운 바로가기가 등록되었습니다.", Toast.LENGTH_LONG).show();
-                    editor.apply();
+                    ed.apply();
+                    Intent intent = new Intent(EditShortCutActivity.this,MainActivity.class);
+                    startActivity(intent);
                 }else{
                     Toast.makeText(getApplicationContext(),"더 이상 추가가 불가능합니다.",Toast.LENGTH_SHORT).show();
+                    NewShortCutDialog.dismiss();
                 }
-                NewShortCutDialog.dismiss();
+
+
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +126,8 @@ public class EditShortCutActivity extends AppCompatActivity {
                 NewShortCutDialog.dismiss();
             }
         });
+
+        NewShortCutDialog.show();
     }
 
 

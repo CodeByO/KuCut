@@ -56,7 +56,7 @@ public class EditProfileActivity extends AppCompatActivity {
         editStudentNumber = findViewById(R.id.editStudentNumber);
 
 
-        Btn_confirm = (Button) findViewById(R.id.btnConfirm);
+        Btn_confirm = (Button) findViewById(R.id.btnEditProfileConfirm);
         SharedPreferences pref = getSharedPreferences("pref",MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         String[] collegeItems = getResources().getStringArray(R.array.colleges);
@@ -110,6 +110,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 editor.apply();
                 Intent intent = new Intent(EditProfileActivity.this,MainActivity.class);
                 startActivity(intent);
+                finish();
+                Toast.makeText(getApplicationContext(), "확인", Toast.LENGTH_SHORT).show();
             }
 
         });

@@ -77,12 +77,12 @@ public class SecondFragment  extends Fragment {
         SharedPreferences pref = this.getActivity().getSharedPreferences("pref",MODE_PRIVATE);
 
         if(pref.getString("userName","").isEmpty()){
-            userName.setText("아직 이름이 없습니다!");
+            userName.setText("NoName");
         }else{
             userName.setText(pref.getString("userName",""));
         }
         if(pref.getString("student_number","").isEmpty()){
-            student_number.setText("학번 : 아직 학번이 없습니다!");
+            student_number.setText("학번 : 저장된 학번이 없습니다!");
         }else{
             student_number.setText("학번 : "+pref.getString("userName",""));
         }

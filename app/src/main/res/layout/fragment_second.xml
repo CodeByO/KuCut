@@ -2,79 +2,111 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="364dp"
+    android:layout_height="459dp"
     android:background="@drawable/shortcut_back"
     tools:context=".MainActivity">
 
 
     <ImageView
         android:id="@+id/collegeImage"
-        android:layout_width="193dp"
-        android:layout_height="171dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginEnd="13dp"
+        android:layout_marginRight="13dp"
+        android:layout_marginBottom="38dp"
         android:src="@mipmap/ic_launcher"
-        tools:layout_editor_absoluteX="14dp"
-        tools:layout_editor_absoluteY="192dp"
+        app:layout_constraintBottom_toTopOf="@+id/student_number"
+        app:layout_constraintEnd_toStartOf="@+id/userName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars[0]" />
 
     <TextView
         android:id="@+id/userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="43dp"
+        android:layout_marginRight="43dp"
+        android:layout_marginBottom="15dp"
         android:text="홍길동"
         android:textColor="#000000"
-        android:textSize="50dp"
-        tools:layout_editor_absoluteX="227dp"
-        tools:layout_editor_absoluteY="217dp" />
-
-    <TextView
-        android:id="@+id/student_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="학번 : "
-        android:textColor="#000000"
-        android:textSize="20dp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="379dp" />
-
-    <TextView
-        android:id="@+id/userid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="아이디 : "
-        android:textColor="#000000"
-        android:textSize="20dp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="474dp" />
-
-    <TextView
-        android:id="@+id/userpw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="비밀번호 : "
-        android:textColor="#000000"
-        android:textSize="20dp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="574dp" />
-
-    <Button
-        android:id="@+id/editProfile"
-        android:layout_width="95dp"
-        android:layout_height="46dp"
-        android:text="수정"
-        android:textColor="#0275d8"
-        android:textSize="20dp"
-        tools:layout_editor_absoluteX="294dp"
-        tools:layout_editor_absoluteY="669dp" />
+        android:textSize="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/department"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/collegeImage" />
 
     <TextView
         android:id="@+id/department"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="94dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="95dp"
         android:text="인공지능사이버보안전공"
-        android:textSize="18dp"
-        tools:layout_editor_absoluteX="217dp"
-        tools:layout_editor_absoluteY="284dp" />
+        android:textSize="14dp"
+        app:layout_constraintBottom_toTopOf="@+id/student_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/collegeImage" />
+
+    <TextView
+        android:id="@+id/student_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginBottom="37dp"
+        android:text="학번 : "
+        android:textColor="#000000"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/userid"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/collegeImage" />
+
+    <TextView
+        android:id="@+id/userid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginBottom="29dp"
+        android:text="아이디 : "
+        android:textColor="#000000"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/userpw"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/student_number" />
+
+    <TextView
+        android:id="@+id/userpw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
+        android:text="비밀번호 : "
+        android:textColor="#000000"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/editProfile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userid" />
+
+    <Button
+        android:id="@+id/editProfile"
+        android:layout_width="91dp"
+        android:layout_height="47dp"
+        android:layout_marginBottom="35dp"
+        android:text="수정"
+        android:textColor="#0275d8"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userpw" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
