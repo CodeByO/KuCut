@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -42,7 +43,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
     Spinner departmentSpinner;
     ArrayAdapter departmentSpinnerAdapter;
-
+    String college_text;
+    String department_text;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -69,49 +71,54 @@ public class EditProfileActivity extends AppCompatActivity {
         departmentSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item,departmentItems);
         departmentSpinner = (Spinner) findViewById(R.id.departmentSpinner2);
         departmentSpinner.setAdapter(departmentSpinnerAdapter);
+        collegeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                SharedPreferences pref = getSharedPreferences("pref",MODE_PRIVATE);
+                final String selectedText = (String) adapterView.getItemAtPosition(i);
+                college_text = selectedText;
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        departmentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                SharedPreferences pref = getSharedPreferences("pref",MODE_PRIVATE);
+                final String selectedText = (String) adapterView.getItemAtPosition(i);
+                department_text = selectedText;
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         Btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "확인", Toast.LENGTH_SHORT).show();
 
-                collegeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        SharedPreferences pref = getSharedPreferences("pref",MODE_PRIVATE);
-                        final String selectedText = (String) adapterView.getItemAtPosition(i);
-                        editor.putString("college",selectedText);
 
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                    }
-                });
-                departmentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        SharedPreferences pref = getSharedPreferences("pref",MODE_PRIVATE);
-                        final String selectedText = (String) adapterView.getItemAtPosition(i);
-                        editor.putString("department",selectedText);
-
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                    }
-                });
 
                 editor.putString("userid",editUserid.getText().toString());
                 editor.putString("userpw",editUserpw.getText().toString());
                 editor.putString("userName",editUserName.getText().toString());
+                Log.d("studentNumber : ",editStudentNumber.getText().toString() );
                 editor.putString("studentNumber",editStudentNumber.getText().toString());
+                editor.putString("college",college_text);
+                editor.putString("department",department_text);
                 editor.apply();
                 Intent intent = new Intent(EditProfileActivity.this,MainActivity.class);
                 startActivity(intent);
                 finish();
-                Toast.makeText(getApplicationContext(), "확인", Toast.LENGTH_SHORT).show();
+
             }
 
         });
@@ -148,13 +155,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 .setNegativeButtonText("취소")
                 .setDeviceCredentialAllowed(false)
                 .build();
-
-        Btn_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //db에 업로드 및 텍스트 설정
-            }
-        });
 
     }
     public void showPasswordDialog() {

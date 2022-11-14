@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     //ListView Adapter
     FragmentPagerAdapter adapterViewPager;
     private long presstime = 0;
-
+    private CircleIndicator indicator;
     // 기본 링크 데이터 DB 등록
     //SQLiteDatabase db = dbHelper.getWritableDatabase();
     @Override
@@ -96,7 +96,8 @@ public class MainActivity extends AppCompatActivity {
         ViewPager vpPager = (ViewPager) findViewById(R.id.vpPager);
         adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
         vpPager.setAdapter(adapterViewPager);
-
+        indicator = findViewById(R.id.indicator);
+        indicator.setViewPager(vpPager);
 
 
         //지문 인식 사용 가능 여부 확인

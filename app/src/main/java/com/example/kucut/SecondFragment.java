@@ -81,10 +81,10 @@ public class SecondFragment  extends Fragment {
         }else{
             userName.setText(pref.getString("userName",""));
         }
-        if(pref.getString("student_number","").isEmpty()){
+        if(pref.getString("studentNumber","").isEmpty()){
             student_number.setText("학번 : 저장된 학번이 없습니다!");
         }else{
-            student_number.setText("학번 : "+pref.getString("userName",""));
+            student_number.setText("학번 : "+pref.getString("studentNumber",""));
         }
         if(pref.getString("userid","").isEmpty()){
             userid.setText("아이디 : 저장된 아이디가 없습니다!");
@@ -97,25 +97,26 @@ public class SecondFragment  extends Fragment {
             userpw.setText("비밀번호 : "+pref.getString("userpw",""));
         }
         if(pref.getString("department","").isEmpty()){
-            department.setText("학번 : 저장된 학번이 없습니다!");
+            department.setText("저장된 학과가 없습니다!");
         }else{
-            department.setText("학번 : "+pref.getString("department",""));
+            department.setText(pref.getString("department",""));
         }
         if(pref.getString("college","").isEmpty()){
             collegeImage.setImageResource(R.mipmap.ic_launcher);
         }else{
             String college = pref.getString("college","");
-                if(college == "과학기술대학"){
+            Log.d("selected college : ",college);
+                if(college.equals("과학기술대학")){
                     collegeImage.setImageResource(R.drawable.science);
-                }else if(college == "약학대학"){
+                }else if(college.equals("약학대학")){
                     collegeImage.setImageResource(R.drawable.madicine);
-                }else if(college == "글로벌비즈니스대학"){
+                }else if(college.equals("글로벌비즈니스대학")){
                     collegeImage.setImageResource(R.drawable.global_bussiness);
-                }else if(college == "공공정책대학"){
+                }else if(college.equals("공공정책대학")){
                     collegeImage.setImageResource(R.drawable.public_policy);
-                }else if(college == "문화스포츠대학"){
+                }else if(college.equals("문화스포츠대학")){
                     collegeImage.setImageResource(R.drawable.culture_and_sports);
-                }else if(college == "스마트도시학부"){
+                }else if(college.equals("스마트도시학부")){
                     collegeImage.setImageResource(R.mipmap.ic_launcher);
                 }else{
                     collegeImage.setImageResource(R.mipmap.ic_launcher);
