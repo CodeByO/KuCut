@@ -3,6 +3,8 @@ package com.example.kucut;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
         import androidx.fragment.app.Fragment;
@@ -52,21 +54,43 @@ public class FirstFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        SharedPreferences pref = getActivity().getSharedPreferences("pref",Context.MODE_PRIVATE);
+        //SharedPreferences pref = getActivity().getSharedPreferences("pref",Context.MODE_PRIVATE);
+        DbHelper dbHelper = new DbHelper(getActivity());
         View view = inflater.inflate(R.layout.fragment_first, container, false);
         GridView gridView = (GridView) view.findViewById(R.id.gridView);
         ListItemAdapter adapter = new ListItemAdapter();
 
 
 
-        Map<String,?> keys = pref.getAll();
-        for(Map.Entry<String,?> entry : keys.entrySet()){
-            if(entry.getKey().endsWith("_**")){
-                adapter.addItem(new ListItem(entry.getKey().replace("_**",""), (String)entry.getValue()));
-            }
+//        Map<String,?> keys = pref.getAll();
+//        for(Map.Entry<String,?> entry : keys.entrySet()){
+//            if(entry.getKey().endsWith("_**")){
+//                adapter.addItem(new ListItem(entry.getKey().replace("_**",""), (String)entry.getValue()));
+//            }
+//
+//        }
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        }
+        String[] projection = {
+                SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME,
+                SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_LINK,
+                SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_IMAGE
+        };
 
+        String selection = SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_TYPE = " = ?";
+        String[] selectionArgs = {"0"};
+        String sortOrder =
+                FeedEntry.COLUMN_NAME_SUBTITLE + " DESC";
+
+        Cursor cursor = db.query(
+                FeedEntry.TABLE_NAME,   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                sortOrder               // The sort order
+        );
         // SharedPreferences에서 모든 데이터 값을 가져와 정규식 이용 조건(한글만, 학과,학부,전공,과 문자 제외
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -33,6 +33,7 @@ public class EditShortCutActivity extends AppCompatActivity {
     GridView gridView;
     ListItemAdapter adapter;
     Dialog NewShortCutDialog;
+    DbHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -40,9 +41,10 @@ public class EditShortCutActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("바로가기 편집");
         actionBar.setDisplayHomeAsUpEnabled(true);
-
+        dbHelper = new DbHelper(EditShortCutActivity.this);
         SharedPreferences pref = getSharedPreferences("pref",MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
+
 
 
 
@@ -103,13 +105,25 @@ public class EditShortCutActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(adapter.getCount() <= 25){
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
                     SharedPreferences.Editor ed = editor;
                     String name = NewName.getText().toString();
-                    name = name+"_**";
-                    ed.putString(name,NewLink.getText().toString());
-                    adapter.addItem(new ListItem(NewName.getText().toString(), NewLink.getText().toString()));
+                    String link = NewLink.getText().toString();
+                    //name = name+"_**";
+                    //ed.putString(name,NewLink.getText().toString());
+
+                    ContentValues values = new ContentValues();
+                    values.put(SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME,name);
+                    values.put(SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_LINK,link);
+                    values.put(SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_IMAGE,"null");
+                    values.put(SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_TYPE,"0");
+
+                    db.insert(SqlHandle.FeedShortCut.SHORTCUT_TABLE_NAME, null, values);
+
+                    db.close();
+                    adapter.addItem(new ListItem(name, link ));
                     Toast.makeText(getApplicationContext(), "새로운 바로가기가 등록되었습니다.", Toast.LENGTH_LONG).show();
-                    ed.apply();
+                    //ed.apply();
                     Intent intent = new Intent(EditShortCutActivity.this,MainActivity.class);
                     startActivity(intent);
                 }else{
@@ -140,10 +154,16 @@ public class EditShortCutActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String name = ShortCutName;
-                        name = name + "_**";
-                        editor.remove(name);
-                        editor.apply();
-                        adapter.removeItem(item);
+//                        name = name + "_**";
+//                        editor.remove(name);
+//                        editor.apply();
+//                        adapter.removeItem(item);
+
+                        SQLiteDatabase db = dbHelper.getWritableDatabase();
+                        String selection = SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME + " LIKE ?";
+                        String[] selectionArgs = {name};
+                        db.delete(SqlHandle.FeedShortCut.SHORTCUT_TABLE_NAME,selection,selectionArgs);
+                        db.close();
 
                         Intent intent = new Intent(EditShortCutActivity.this,MainActivity.class);
                         startActivity(intent);

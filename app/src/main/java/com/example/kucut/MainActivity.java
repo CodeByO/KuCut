@@ -45,6 +45,13 @@ import me.relex.circleindicator.CircleIndicator;
 import static android.hardware.biometrics.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 import static android.hardware.biometrics.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
+import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME;
+import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_LINK;
+import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_IMAGE;
+import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_IMAGE;
+import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_TYPE;
+import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_TABLE_NAME;
+
 public class MainActivity extends AppCompatActivity {
     private Executor executor;
     private BiometricPrompt biometricPrompt;
@@ -52,15 +59,17 @@ public class MainActivity extends AppCompatActivity {
     Button editShortCut;//바로가기 편집
     TextView EditProfile;// 수정버튼
     ImageButton ShowPassword;
-    //DbHelper dbHelper = new DbHelper(MainActivity.this);
+
     Spinner spinner;
     ArrayAdapter spinnerAdapter;
     //ListView Adapter
     FragmentPagerAdapter adapterViewPager;
     private long presstime = 0;
     private CircleIndicator indicator;
-    // 기본 링크 데이터 DB 등록
-    //SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+    //데이터베이스 설정
+    DbHelper dbHelper = new DbHelper(MainActivity.this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,62 +145,125 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences pref = getSharedPreferences("pref",MODE_PRIVATE);
 
         if(pref.getString("check","").isEmpty()){
-            SharedPreferences.Editor editor = pref.edit();
-            //ListItem에 추가될 요소들
-            editor.putString("홈페이지_**",BasicLink.FeedLink.HOME_PAGE);
-            editor.putString("포탈_**",BasicLink.FeedLink.PORTAL_PAGE);
-            editor.putString("쿠세움_**",BasicLink.FeedLink.KUSEUM_PAGE);
-            editor.putString("블랙보드_**",BasicLink.FeedLink.BLACKBOARD_PAGE);
-            editor.putString("세종 학술 정보원_**",BasicLink.FeedLink.ACADEMIC_INFO);
-            editor.putString("웹메일_**",BasicLink.FeedLink.WEB_MAIL);
-            editor.putString("성적조회_**",BasicLink.FeedLink.GRADE_LOOKUP);
-            editor.putString("학사일정_**",BasicLink.FeedLink.ACADEMIC_CALENDAR);
-            editor.putString("증성서 신청_**",BasicLink.FeedLink.CERTIFICATE_APPLICATION);
-            editor.putString("참여마당_**",BasicLink.FeedLink.PARTICIPATION_YARD);
-            editor.putString("세종학생 상담센터_**",BasicLink.FeedLink.COUNSELING_CENTER);
-            editor.putString("교수학습 지원센터_**",BasicLink.FeedLink.TEACHING_LEARNING);
-            editor.putString("세종창업 교육센터_**",BasicLink.FeedLink.ENTREPRENEURSHIP_EDUCATION);
-            editor.putString("대학 일자리 센터_**",BasicLink.FeedLink.JOB_CENTER);
-            editor.putString("세종 사회 봉사단_**",BasicLink.FeedLink.COMMUNITY_SERVICE);
-            editor.putString("호연학사_**",BasicLink.FeedLink.DORMITORY_PAGE);
-            editor.putString("학사 일반 공지_**",BasicLink.FeedLink.GENERAL_NOTICE);
-            editor.putString("교내 행사 공지_**",BasicLink.FeedLink.EVENT_NOTICE);
-            editor.putString("코로나 19 공지_**",BasicLink.FeedLink.COVID19_NOTICE);
-            editor.putString("열람실 현황/배정_**",BasicLink.FeedLink.READING_ROOM);
-            editor.putString("셔틀버스 시간표_**",BasicLink.FeedLink.SHUTTLE_BUS);
-            editor.putString("교내 식당 식단표_**",BasicLink.FeedLink.CAMPUS_CAFETERIA);
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-            //Spinner에 추가될 요소들
-            editor.putString("데이터계산과학전공",BasicLink.DepartmentLink.DATA_CALCULATE);
-            editor.putString("인공지능사이버보안학과",BasicLink.DepartmentLink.ARTIFICIAL_SECURITY);
-            editor.putString("디스플레이·반도체물리학부",BasicLink.DepartmentLink.DISPLAY_SEMICONDUCTOR);
-            editor.putString("신소재화학과",BasicLink.DepartmentLink.MATERIAL_CHEMISTRY);
-            editor.putString("컴퓨터융합소프트웨어학과",BasicLink.DepartmentLink.COMPUTER_SOFTWARE);
-            editor.putString("전자정보공학과",BasicLink.DepartmentLink.ELECTRONIC_INFORMATION);
-            editor.putString("생명정보공학과",BasicLink.DepartmentLink.LIFE_INFORMATION);
-            editor.putString("식품생명공학과",BasicLink.DepartmentLink.FOOD_LIFE);
-            editor.putString("전자·기계융합공학과",BasicLink.DepartmentLink.ELECTRONIC_MACHINE);
-            editor.putString("환경시스템공학과",BasicLink.DepartmentLink.ENVIRONMENT_SYSTEM);
-            editor.putString("자유공학부",BasicLink.DepartmentLink.FREE_ENGINEER);
-            editor.putString("미래모빌리티학과",BasicLink.DepartmentLink.FUTURE_MOBILITY);
-            editor.putString("지능형반도체공학과",BasicLink.DepartmentLink.INTELLIGENT_SEMICONDUCTOR);
-            editor.putString("정부행정학부",BasicLink.DepartmentLink.GOVERNMENT_ADMINISTRATION);
-            editor.putString("공공사회학전공",BasicLink.DepartmentLink.PUBLIC_SOCIAL);
-            editor.putString("통일외교안보전공",BasicLink.DepartmentLink.UNIFICATION_DIPLOMACY);
-            editor.putString("경제정책학정공",BasicLink.DepartmentLink.ECONOMIC_POLICY);
-            editor.putString("빅테이터사이언스학부",BasicLink.DepartmentLink.BIG_DATA);
-            editor.putString("국제스포츠학부",BasicLink.DepartmentLink.INTERNATIONAL_SPORT);
-            editor.putString("문화유산융합학부",BasicLink.DepartmentLink.CULTURE_HERITAGE);
-            editor.putString("문화컨텐츠전공",BasicLink.DepartmentLink.CULTURE_CONTENT);
-            editor.putString("한국학전공",BasicLink.DepartmentLink.KOREA_STUDIES);
-            editor.putString("중국학전공",BasicLink.DepartmentLink.CHINA_STUDIES);
-            editor.putString("영미학전공",BasicLink.DepartmentLink.ENGLISH_STUDIES);
-            editor.putString("독일학전공",BasicLink.DepartmentLink.GERMAN_STUDIES);
-            editor.putString("글로벌경영전공",BasicLink.DepartmentLink.GLOBAL_MANAGEMENT);
-            editor.putString("디지털경영전공",BasicLink.DepartmentLink.DIGITAL_MANAGEMENT);
-            editor.putString("표준지식학과",BasicLink.DepartmentLink.BASIC_INTELLIGENCE);
-            editor.putString("약학과",BasicLink.DepartmentLink.MEDICINE_STUDIES);
-            editor.putString("스마트도시학부",BasicLink.DepartmentLink.SMART_CITY);
+
+
+            String SQL_INSERT_MANY = "INSERT INTO shortcut (name,link,image,type) SELECT ";
+
+            SQL_INSERT_MANY = SQL_INSERT_MANY + "\"홈페이지\", \""+BasicLink.FeedLink.HOME_PAGE+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"포탈\", \""+BasicLink.FeedLink.PORTAL_PAGE+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"쿠세움\", \""+BasicLink.FeedLink.KUSEUM_PAGE+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"블랙보드\", \""+BasicLink.FeedLink.BLACKBOARD_PAGE+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"세종학술정보원\", \""+BasicLink.FeedLink.ACADEMIC_INFO+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"웹메일\", \""+BasicLink.FeedLink.WEB_MAIL+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"성적조회\", \""+BasicLink.FeedLink.GRADE_LOOKUP+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"학사일정\", \""+BasicLink.FeedLink.ACADEMIC_CALENDAR+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"증명서 신청\", \""+BasicLink.FeedLink.CERTIFICATE_APPLICATION+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"참여마당\", \""+BasicLink.FeedLink.PARTICIPATION_YARD+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"세종학생 상담센터\", \""+BasicLink.FeedLink.COUNSELING_CENTER+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"교수학습 지원센터\", \""+BasicLink.FeedLink.TEACHING_LEARNING+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"세종창업 교육센터\", \""+BasicLink.FeedLink.ENTREPRENEURSHIP_EDUCATION+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"대학 일자리 센터\", \""+BasicLink.FeedLink.JOB_CENTER+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"세종 사회 봉사단\", \""+BasicLink.FeedLink.COMMUNITY_SERVICE+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"호연학사\", \""+BasicLink.FeedLink.DORMITORY_PAGE+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"학사 일반 공지\", \""+BasicLink.FeedLink.GENERAL_NOTICE+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"교내 행사 공지\", \""+BasicLink.FeedLink.EVENT_NOTICE+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"코로나 19 공지\", \""+BasicLink.FeedLink.COVID19_NOTICE+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"열람실 현황/배정\", \""+BasicLink.FeedLink.READING_ROOM+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"셔틀버스 시간표\", \""+BasicLink.FeedLink.SHUTTLE_BUS+"\",\"null\","+"\"0\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"교내 식당 식단표\", \""+BasicLink.FeedLink.CAMPUS_CAFETERIA+"\",\"null\","+"\"0\"";
+
+
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"데이터계산과학전공\", \""+BasicLink.DepartmentLink.DATA_CALCULATE+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"인공지능사이버보안학과\", \""+BasicLink.DepartmentLink.ARTIFICIAL_SECURITY+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"디스플레이·반도체학부\", \""+BasicLink.DepartmentLink.DISPLAY_SEMICONDUCTOR+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"신소재화학과\", \""+BasicLink.DepartmentLink.MATERIAL_CHEMISTRY+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"컴퓨터융합소프트웨어학과\", \""+BasicLink.DepartmentLink.COMPUTER_SOFTWARE+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"전자정보공학과\", \""+BasicLink.DepartmentLink.ELECTRONIC_INFORMATION+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"생명정보공학과\", \""+BasicLink.DepartmentLink.LIFE_INFORMATION+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"식품생명공학과\", \""+BasicLink.DepartmentLink.FOOD_LIFE+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"잔자·기계융합공학과\", \""+BasicLink.DepartmentLink.ELECTRONIC_MACHINE+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"환경시스템공학과\", \""+BasicLink.DepartmentLink.ENVIRONMENT_SYSTEM+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"자유공학부\", \""+BasicLink.DepartmentLink.FREE_ENGINEER+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"미래모빌리티학과\", \""+BasicLink.DepartmentLink.FUTURE_MOBILITY+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"지능형반도체공학과\", \""+BasicLink.DepartmentLink.INTELLIGENT_SEMICONDUCTOR+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"정부행정학부\", \""+BasicLink.DepartmentLink.GOVERNMENT_ADMINISTRATION+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"공공사회학전공\", \""+BasicLink.DepartmentLink.PUBLIC_SOCIAL+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"통일외교안보전공\", \""+BasicLink.DepartmentLink.UNIFICATION_DIPLOMACY+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"경제정책학전공\", \""+BasicLink.DepartmentLink.ECONOMIC_POLICY+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"빅데이터사이언스학부\", \""+BasicLink.DepartmentLink.BIG_DATA+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"국제스포츠학부\", \""+BasicLink.DepartmentLink.INTERNATIONAL_SPORT+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"문화유산융합학부\", \""+BasicLink.DepartmentLink.CULTURE_HERITAGE+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"문화컨텐츠전공\", \""+BasicLink.DepartmentLink.CULTURE_CONTENT+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"한국학전공\", \""+BasicLink.DepartmentLink.KOREA_STUDIES+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"중국학전공\", \""+BasicLink.DepartmentLink.CHINA_STUDIES+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"영미학전공\", \""+BasicLink.DepartmentLink.ENGLISH_STUDIES+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"독일학전공\", \""+BasicLink.DepartmentLink.GERMAN_STUDIES+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"글로벌경영전공\", \""+BasicLink.DepartmentLink.GLOBAL_MANAGEMENT+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"디지털경영전공\", \""+BasicLink.DepartmentLink.DIGITAL_MANAGEMENT+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"표준지식학과\", \""+BasicLink.DepartmentLink.BASIC_INTELLIGENCE+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"약학과\", \""+BasicLink.DepartmentLink.MEDICINE_STUDIES+"\",\"null\","+"\"1\"";
+            SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"스마트도시학부\", \""+BasicLink.DepartmentLink.SMART_CITY+"\",\"null\","+"\"1\"";
+
+
+            SharedPreferences.Editor editor = pref.edit();
+//            //ListItem에 추가될 요소들
+//            editor.putString("홈페이지_**",BasicLink.FeedLink.HOME_PAGE);
+//            editor.putString("포탈_**",BasicLink.FeedLink.PORTAL_PAGE);
+//            editor.putString("쿠세움_**",BasicLink.FeedLink.KUSEUM_PAGE);
+//            editor.putString("블랙보드_**",BasicLink.FeedLink.BLACKBOARD_PAGE);
+//            editor.putString("세종 학술 정보원_**",BasicLink.FeedLink.ACADEMIC_INFO);
+//            editor.putString("웹메일_**",BasicLink.FeedLink.WEB_MAIL);
+//            editor.putString("성적조회_**",BasicLink.FeedLink.GRADE_LOOKUP);
+//            editor.putString("학사일정_**",BasicLink.FeedLink.ACADEMIC_CALENDAR);
+//            editor.putString("증성서 신청_**",BasicLink.FeedLink.CERTIFICATE_APPLICATION);
+//            editor.putString("참여마당_**",BasicLink.FeedLink.PARTICIPATION_YARD);
+//            editor.putString("세종학생 상담센터_**",BasicLink.FeedLink.COUNSELING_CENTER);
+//            editor.putString("교수학습 지원센터_**",BasicLink.FeedLink.TEACHING_LEARNING);
+//            editor.putString("세종창업 교육센터_**",BasicLink.FeedLink.ENTREPRENEURSHIP_EDUCATION);
+//            editor.putString("대학 일자리 센터_**",BasicLink.FeedLink.JOB_CENTER);
+//            editor.putString("세종 사회 봉사단_**",BasicLink.FeedLink.COMMUNITY_SERVICE);
+//            editor.putString("호연학사_**",BasicLink.FeedLink.DORMITORY_PAGE);
+//            editor.putString("학사 일반 공지_**",BasicLink.FeedLink.GENERAL_NOTICE);
+//            editor.putString("교내 행사 공지_**",BasicLink.FeedLink.EVENT_NOTICE);
+//            editor.putString("코로나 19 공지_**",BasicLink.FeedLink.COVID19_NOTICE);
+//            editor.putString("열람실 현황/배정_**",BasicLink.FeedLink.READING_ROOM);
+//            editor.putString("셔틀버스 시간표_**",BasicLink.FeedLink.SHUTTLE_BUS);
+//            editor.putString("교내 식당 식단표_**",BasicLink.FeedLink.CAMPUS_CAFETERIA);
+//
+//            //Spinner에 추가될 요소들
+//            editor.putString("데이터계산과학전공",BasicLink.DepartmentLink.DATA_CALCULATE);
+//            editor.putString("인공지능사이버보안학과",BasicLink.DepartmentLink.ARTIFICIAL_SECURITY);
+//            editor.putString("디스플레이·반도체물리학부",BasicLink.DepartmentLink.DISPLAY_SEMICONDUCTOR);
+//            editor.putString("신소재화학과",BasicLink.DepartmentLink.MATERIAL_CHEMISTRY);
+//            editor.putString("컴퓨터융합소프트웨어학과",BasicLink.DepartmentLink.COMPUTER_SOFTWARE);
+//            editor.putString("전자정보공학과",BasicLink.DepartmentLink.ELECTRONIC_INFORMATION);
+//            editor.putString("생명정보공학과",BasicLink.DepartmentLink.LIFE_INFORMATION);
+//            editor.putString("식품생명공학과",BasicLink.DepartmentLink.FOOD_LIFE);
+//            editor.putString("전자·기계융합공학과",BasicLink.DepartmentLink.ELECTRONIC_MACHINE);
+//            editor.putString("환경시스템공학과",BasicLink.DepartmentLink.ENVIRONMENT_SYSTEM);
+//            editor.putString("자유공학부",BasicLink.DepartmentLink.FREE_ENGINEER);
+//            editor.putString("미래모빌리티학과",BasicLink.DepartmentLink.FUTURE_MOBILITY);
+//            editor.putString("지능형반도체공학과",BasicLink.DepartmentLink.INTELLIGENT_SEMICONDUCTOR);
+//            editor.putString("정부행정학부",BasicLink.DepartmentLink.GOVERNMENT_ADMINISTRATION);
+//            editor.putString("공공사회학전공",BasicLink.DepartmentLink.PUBLIC_SOCIAL);
+//            editor.putString("통일외교안보전공",BasicLink.DepartmentLink.UNIFICATION_DIPLOMACY);
+//            editor.putString("경제정책학정공",BasicLink.DepartmentLink.ECONOMIC_POLICY);
+//            editor.putString("빅테이터사이언스학부",BasicLink.DepartmentLink.BIG_DATA);
+//            editor.putString("국제스포츠학부",BasicLink.DepartmentLink.INTERNATIONAL_SPORT);
+//            editor.putString("문화유산융합학부",BasicLink.DepartmentLink.CULTURE_HERITAGE);
+//            editor.putString("문화컨텐츠전공",BasicLink.DepartmentLink.CULTURE_CONTENT);
+//            editor.putString("한국학전공",BasicLink.DepartmentLink.KOREA_STUDIES);
+//            editor.putString("중국학전공",BasicLink.DepartmentLink.CHINA_STUDIES);
+//            editor.putString("영미학전공",BasicLink.DepartmentLink.ENGLISH_STUDIES);
+//            editor.putString("독일학전공",BasicLink.DepartmentLink.GERMAN_STUDIES);
+//            editor.putString("글로벌경영전공",BasicLink.DepartmentLink.GLOBAL_MANAGEMENT);
+//            editor.putString("디지털경영전공",BasicLink.DepartmentLink.DIGITAL_MANAGEMENT);
+//            editor.putString("표준지식학과",BasicLink.DepartmentLink.BASIC_INTELLIGENCE);
+//            editor.putString("약학과",BasicLink.DepartmentLink.MEDICINE_STUDIES);
+//            editor.putString("스마트도시학부",BasicLink.DepartmentLink.SMART_CITY);
+
 
             //개인 정보
             editor.putString("userid","");
@@ -207,6 +279,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("check","exist");
 
             editor.commit();
+            db.close();
         }
 /*
         //앱 설치 후 최초 실행 시 동작 (Use SQLite)

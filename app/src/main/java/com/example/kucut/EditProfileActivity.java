@@ -130,6 +130,10 @@ public class EditProfileActivity extends AppCompatActivity {
                 editor.putString("college",college_text);
                 editor.putString("department",department_text);
                 editor.apply();
+
+
+
+
                 Intent intent = new Intent(EditProfileActivity.this,MainActivity.class);
                 startActivity(intent);
                 finish();
