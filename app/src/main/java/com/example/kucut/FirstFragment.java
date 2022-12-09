@@ -115,8 +115,14 @@ public class FirstFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 final ListItem item = (ListItem) adapter.getItem(i);
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getLink()));
-                startActivity(intent);
+
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getLink()));
+                    startActivity(intent);
+                }
+                catch(Exception e){
+                    Toast.makeText(getActivity(),"잘못된 주소 입니다.",Toast.LENGTH_SHORT).show();
+                }
             }
         });
         return view;

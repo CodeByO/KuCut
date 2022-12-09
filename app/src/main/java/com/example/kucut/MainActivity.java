@@ -125,8 +125,19 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences pref = getSharedPreferences("pref",MODE_PRIVATE);
                 //final String selectedLink = pref.getString(selectedText,"");
                 if(!selectedLink.equals("null")){
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(selectedLink));
-                    startActivity(intent);
+
+
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(selectedLink));
+                        startActivity(intent);
+                    }catch (Exception e){
+
+                        Toast.makeText(getApplicationContext(),"잘못된 주소 입니다.",Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+
                 }
 
 
