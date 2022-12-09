@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
             SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"약학과\", \""+BasicLink.DepartmentLink.MEDICINE_STUDIES+"\",\"null\","+"\"1\"";
             SQL_INSERT_MANY = SQL_INSERT_MANY + " UNION SELECT " +"\"스마트도시학부\", \""+BasicLink.DepartmentLink.SMART_CITY+"\",\"null\","+"\"1\"";
 
-
+            db.execSQL(SQL_INSERT_MANY);
             SharedPreferences.Editor editor = pref.edit();
 //            //ListItem에 추가될 요소들
 //            editor.putString("홈페이지_**",BasicLink.FeedLink.HOME_PAGE);
@@ -281,54 +281,7 @@ public class MainActivity extends AppCompatActivity {
             editor.commit();
             db.close();
         }
-/*
-        //앱 설치 후 최초 실행 시 동작 (Use SQLite)
-        SharedPreferences pref = getSharedPreferences("pref",MODE_PRIVATE);
-        pref.getString("check","");
-        if(pref.getString("check","").isEmpty()){
-            //최초 실행시 수행할 동작
-            //DB 정보 추가
 
-            //ContentValues values = new ContentValues();
-
-
-            //DB 닫기
-            //db.close();
-        }
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString("check","exist");
-        editor.commit();
-
-        String[] projection = {
-                SqlHandle.FeedShortCut._ID,
-                SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME,
-                SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_LINK,
-                SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_IMAGE
-        };
-        /*Cursor cursor = db.query(
-                SqlHandle.FeedShortCut.SHORTCUT_TABLE_NAME,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                null
-                );
-
-        List itemNames = new ArrayList<>();
-        List itemLinks = new ArrayList<>();
-        while(cursor.moveToNext()) {
-            long itemName = cursor.getLong(
-                    cursor.getColumnIndexOrThrow(SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME)
-            );
-            long itemLink = cursor.getLong(
-                    cursor.getColumnIndexOrThrow(SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_LINK)
-            );
-            itemNames.add(itemName);
-            itemLinks.add(itemLink);
-        }
-        cursor.close();
-*/
     }
 
     // 지문 인식 통과 후 수정 및 확인 다이알로그

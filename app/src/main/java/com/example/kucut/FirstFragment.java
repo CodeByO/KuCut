@@ -22,6 +22,10 @@ import android.widget.Toast;
 
 import java.util.Map;
 
+import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_IMAGE;
+import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_LINK;
+import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME;
+import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_TYPE;
 
 public class FirstFragment extends Fragment {
     // Store instance variables
@@ -77,13 +81,13 @@ public class FirstFragment extends Fragment {
                 SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_IMAGE
         };
 
-        String selection = SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_TYPE = " = ?";
+        String selection = SHORTCUT_COLUMN_NAME_TYPE + " = ?";
         String[] selectionArgs = {"0"};
         String sortOrder =
-                FeedEntry.COLUMN_NAME_SUBTITLE + " DESC";
+                SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME + " DESC";
 
         Cursor cursor = db.query(
-                FeedEntry.TABLE_NAME,   // The table to query
+                SqlHandle.FeedShortCut.SHORTCUT_TABLE_NAME,   // The table to query
                 projection,             // The array of columns to return (pass null to get all)
                 selection,              // The columns for the WHERE clause
                 selectionArgs,          // The values for the WHERE clause
@@ -91,6 +95,20 @@ public class FirstFragment extends Fragment {
                 null,                   // don't filter by row groups
                 sortOrder               // The sort order
         );
+        while(cursor.moveToNext()){
+            String name = cursor.getString(
+                    cursor.getColumnIndexOrThrow(SHORTCUT_COLUMN_NAME_NAME)
+
+            );
+            String link = cursor.getString(
+                    cursor.getColumnIndexOrThrow(SHORTCUT_COLUMN_NAME_LINK)
+            );
+            String img = cursor.getString(
+                    cursor.getColumnIndexOrThrow(SHORTCUT_COLUMN_NAME_IMAGE)
+            );
+            adapter.addItem(new ListItem(name,link));
+
+        }
         // SharedPreferences에서 모든 데이터 값을 가져와 정규식 이용 조건(한글만, 학과,학부,전공,과 문자 제외
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

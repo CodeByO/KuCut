@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +27,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Map;
+
+import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_IMAGE;
+import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_LINK;
+import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME;
+import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_TYPE;
 
 public class EditShortCutActivity extends AppCompatActivity {
 
@@ -58,11 +64,47 @@ public class EditShortCutActivity extends AppCompatActivity {
 
 
         // SharedPreferences에서 모든 데이터 값을 가져와 정규식 이용 조건(한글만, 학과,학부,전공,과 문자 제외
-        Map<String,?> keys = pref.getAll();
-        for(Map.Entry<String,?> entry : keys.entrySet()){
-            if(entry.getKey().endsWith("_**")){
-                adapter.addItem(new ListItem(entry.getKey().replace("_**",""), (String)entry.getValue()));
-            }
+        //Map<String,?> keys = pref.getAll();
+       // for(Map.Entry<String,?> entry : keys.entrySet()){
+           // if(entry.getKey().endsWith("_**")){
+           //     adapter.addItem(new ListItem(entry.getKey().replace("_**",""), (String)entry.getValue()));
+          //  }
+
+      //  }
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME,
+                SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_LINK,
+                SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_IMAGE
+        };
+
+        String selection = SHORTCUT_COLUMN_NAME_TYPE + " = ?";
+        String[] selectionArgs = {"0"};
+        String sortOrder =
+                SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME + " DESC";
+
+        Cursor cursor = db.query(
+                SqlHandle.FeedShortCut.SHORTCUT_TABLE_NAME,   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                sortOrder               // The sort order
+        );
+        while(cursor.moveToNext()){
+            String name = cursor.getString(
+                    cursor.getColumnIndexOrThrow(SHORTCUT_COLUMN_NAME_NAME)
+
+            );
+            String link = cursor.getString(
+                    cursor.getColumnIndexOrThrow(SHORTCUT_COLUMN_NAME_LINK)
+            );
+            String img = cursor.getString(
+                    cursor.getColumnIndexOrThrow(SHORTCUT_COLUMN_NAME_IMAGE)
+            );
+            adapter.addItem(new ListItem(name,link));
 
         }
         gridView.setAdapter(adapter);
@@ -98,9 +140,16 @@ public class EditShortCutActivity extends AppCompatActivity {
 
         Button confirm = (Button) NewShortCutDialog.findViewById(R.id.addNewShortCutBtn);
         Button cancel = (Button) NewShortCutDialog.findViewById(R.id.cancelNewShortCutBtn);
+        Button find = (Button) NewShortCutDialog.findViewById(R.id.openFileExploreBtn);
         EditText NewName = (EditText) NewShortCutDialog.findViewById(R.id.shortcut_name);
         EditText NewLink = (EditText) NewShortCutDialog.findViewById(R.id.shortcut_link);
-
+        EditText NewImg = (EditText) NewShortCutDialog.findViewById(R.id.shortcut_imgPath);
+        find.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),"아직 미구현",Toast.LENGTH_SHORT).show();
+            }
+        });
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,6 +175,7 @@ public class EditShortCutActivity extends AppCompatActivity {
                     //ed.apply();
                     Intent intent = new Intent(EditShortCutActivity.this,MainActivity.class);
                     startActivity(intent);
+                    finish();
                 }else{
                     Toast.makeText(getApplicationContext(),"더 이상 추가가 불가능합니다.",Toast.LENGTH_SHORT).show();
                     NewShortCutDialog.dismiss();
