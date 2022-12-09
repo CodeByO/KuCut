@@ -1,6 +1,7 @@
 package com.example.kucut;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
@@ -11,6 +12,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.content.ContentValues;
 import android.content.Context;
@@ -20,8 +23,10 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.BaseColumns;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
@@ -70,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     //데이터베이스 설정
     DbHelper dbHelper = new DbHelper(MainActivity.this);
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,10 +90,41 @@ public class MainActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                SharedPreferences pref = getSharedPreferences("pref",MODE_PRIVATE);
                 final String selectedText = (String) adapterView.getItemAtPosition(i);
-                final String selectedLink = pref.getString(selectedText,"");
-                if(!selectedLink.isEmpty()){
+                String selectedLink="null";
+                SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+                String[] projection = {
+                        SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME,
+                        SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_LINK,
+                };
+
+                String selection = SHORTCUT_COLUMN_NAME_NAME + " = ?";
+                String[] selectionArgs = {selectedText};
+                String sortOrder =
+                        SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME + " DESC";
+
+                Cursor cursor = db.query(
+                        SqlHandle.FeedShortCut.SHORTCUT_TABLE_NAME,   // The table to query
+                        projection,             // The array of columns to return (pass null to get all)
+                        selection,              // The columns for the WHERE clause
+                        selectionArgs,          // The values for the WHERE clause
+                        null,                   // don't group the rows
+                        null,                   // don't filter by row groups
+                        sortOrder               // The sort order
+                );
+
+                if(cursor.moveToFirst()){
+                    selectedLink = cursor.getString(
+                            cursor.getColumnIndexOrThrow(SHORTCUT_COLUMN_NAME_LINK)
+                    );
+
+                }
+
+
+                SharedPreferences pref = getSharedPreferences("pref",MODE_PRIVATE);
+                //final String selectedLink = pref.getString(selectedText,"");
+                if(!selectedLink.equals("null")){
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(selectedLink));
                     startActivity(intent);
                 }
