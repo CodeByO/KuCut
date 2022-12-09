@@ -9,8 +9,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -22,12 +26,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
+import static android.content.ContentValues.TAG;
 import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_IMAGE;
 import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_LINK;
 import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME;
@@ -40,18 +48,18 @@ public class EditShortCutActivity extends AppCompatActivity {
     ListItemAdapter adapter;
     Dialog NewShortCutDialog;
     DbHelper dbHelper;
+    Uri img_url ;
+    EditText NewImg;
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editshortcut);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("바로가기 편집");
         actionBar.setDisplayHomeAsUpEnabled(true);
         dbHelper = new DbHelper(EditShortCutActivity.this);
-        SharedPreferences pref = getSharedPreferences("pref",MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-
-
 
 
         gridView = (GridView) findViewById(R.id.edit_gridView);
@@ -62,15 +70,14 @@ public class EditShortCutActivity extends AppCompatActivity {
         NewShortCutDialog.setContentView(R.layout.new_shortcut_dialog);
 
 
-
         // SharedPreferences에서 모든 데이터 값을 가져와 정규식 이용 조건(한글만, 학과,학부,전공,과 문자 제외
         //Map<String,?> keys = pref.getAll();
-       // for(Map.Entry<String,?> entry : keys.entrySet()){
-           // if(entry.getKey().endsWith("_**")){
-           //     adapter.addItem(new ListItem(entry.getKey().replace("_**",""), (String)entry.getValue()));
-          //  }
+        // for(Map.Entry<String,?> entry : keys.entrySet()){
+        // if(entry.getKey().endsWith("_**")){
+        //     adapter.addItem(new ListItem(entry.getKey().replace("_**",""), (String)entry.getValue()));
+        //  }
 
-      //  }
+        //  }
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
@@ -93,7 +100,7 @@ public class EditShortCutActivity extends AppCompatActivity {
                 null,                   // don't filter by row groups
                 sortOrder               // The sort order
         );
-        while(cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             String name = cursor.getString(
                     cursor.getColumnIndexOrThrow(SHORTCUT_COLUMN_NAME_NAME)
 
@@ -104,7 +111,7 @@ public class EditShortCutActivity extends AppCompatActivity {
             String img = cursor.getString(
                     cursor.getColumnIndexOrThrow(SHORTCUT_COLUMN_NAME_IMAGE)
             );
-            adapter.addItem(new ListItem(name,link));
+            adapter.addItem(new ListItem(name, link,img));
 
         }
         gridView.setAdapter(adapter);
@@ -114,12 +121,10 @@ public class EditShortCutActivity extends AppCompatActivity {
 
                 final ListItem item = (ListItem) adapter.getItem(i);
                 final String name = item.getName();
-                showDeleteDialog(name,editor,item,adapter);
+                showDeleteDialog(name, editor, item, adapter);
 
             }
         });
-
-
 
 
         NewShortCut = (Button) findViewById(R.id.btnNewShortCut);
@@ -143,41 +148,50 @@ public class EditShortCutActivity extends AppCompatActivity {
         Button find = (Button) NewShortCutDialog.findViewById(R.id.openFileExploreBtn);
         EditText NewName = (EditText) NewShortCutDialog.findViewById(R.id.shortcut_name);
         EditText NewLink = (EditText) NewShortCutDialog.findViewById(R.id.shortcut_link);
-        EditText NewImg = (EditText) NewShortCutDialog.findViewById(R.id.shortcut_imgPath);
+        NewImg = (EditText) NewShortCutDialog.findViewById(R.id.shortcut_imgPath);
         find.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"아직 미구현",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "아직 미구현", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(intent,10);
+
             }
         });
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(adapter.getCount() <= 25){
+                if (adapter.getCount() <= 25) {
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     SharedPreferences.Editor ed = editor;
                     String name = NewName.getText().toString();
                     String link = NewLink.getText().toString();
+                    Uri img = img_url;
+                    String img_path = img.toString();
+                    if(img_path.isEmpty()){
+                        img_path = "null";
+                    }
                     //name = name+"_**";
                     //ed.putString(name,NewLink.getText().toString());
 
                     ContentValues values = new ContentValues();
-                    values.put(SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME,name);
-                    values.put(SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_LINK,link);
-                    values.put(SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_IMAGE,"null");
-                    values.put(SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_TYPE,"0");
+                    values.put(SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME, name);
+                    values.put(SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_LINK, link);
+                    values.put(SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_IMAGE, img_path);
+                    values.put(SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_TYPE, "0");
 
                     db.insert(SqlHandle.FeedShortCut.SHORTCUT_TABLE_NAME, null, values);
 
                     db.close();
-                    adapter.addItem(new ListItem(name, link ));
+                    adapter.addItem(new ListItem(name, link,img.toString()));
                     Toast.makeText(getApplicationContext(), "새로운 바로가기가 등록되었습니다.", Toast.LENGTH_LONG).show();
                     //ed.apply();
-                    Intent intent = new Intent(EditShortCutActivity.this,MainActivity.class);
+                    Intent intent = new Intent(EditShortCutActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
-                }else{
-                    Toast.makeText(getApplicationContext(),"더 이상 추가가 불가능합니다.",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "더 이상 추가가 불가능합니다.", Toast.LENGTH_SHORT).show();
                     NewShortCutDialog.dismiss();
                 }
 
@@ -195,10 +209,11 @@ public class EditShortCutActivity extends AppCompatActivity {
     }
 
 
-    public void showDeleteDialog(String ShortCutName,SharedPreferences.Editor editor,ListItem item,ListItemAdapter adapter) {
+
+    public void showDeleteDialog(String ShortCutName, SharedPreferences.Editor editor, ListItem item, ListItemAdapter adapter) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("'" + ShortCutName + "'"+ " 삭제");
+        builder.setTitle("'" + ShortCutName + "'" + " 삭제");
         builder.setMessage("정말로 삭제 하시겠습니까?");
         builder.setPositiveButton("확인",
                 new DialogInterface.OnClickListener() {
@@ -212,10 +227,10 @@ public class EditShortCutActivity extends AppCompatActivity {
                         SQLiteDatabase db = dbHelper.getWritableDatabase();
                         String selection = SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME + " LIKE ?";
                         String[] selectionArgs = {name};
-                        db.delete(SqlHandle.FeedShortCut.SHORTCUT_TABLE_NAME,selection,selectionArgs);
+                        db.delete(SqlHandle.FeedShortCut.SHORTCUT_TABLE_NAME, selection, selectionArgs);
                         db.close();
 
-                        Intent intent = new Intent(EditShortCutActivity.this,MainActivity.class);
+                        Intent intent = new Intent(EditShortCutActivity.this, MainActivity.class);
                         startActivity(intent);
                     }
                 });
@@ -226,5 +241,25 @@ public class EditShortCutActivity extends AppCompatActivity {
                 });
         builder.show();
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+        if (requestCode != 1 || resultCode != RESULT_OK) {
+            Toast.makeText(getApplicationContext(),"이미지를 불러오지 못했습니다.",Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        Uri selectedfile = data.getData();
+
+        Log.d(TAG, "Selected: " + selectedfile.toString());
+
+        String check = data.getDataString();
+        if(!check.isEmpty()){
+            img_url = data.getData();
+            Log.d("img url", img_url.toString());
+            NewImg.setText("file:///" + Environment.getExternalStorageDirectory() + img_url.toString());
+        }
+
+    }
 }
+

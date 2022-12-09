@@ -106,7 +106,7 @@ public class FirstFragment extends Fragment {
             String img = cursor.getString(
                     cursor.getColumnIndexOrThrow(SHORTCUT_COLUMN_NAME_IMAGE)
             );
-            adapter.addItem(new ListItem(name,link));
+            adapter.addItem(new ListItem(name,link,img));
 
         }
         // SharedPreferences에서 모든 데이터 값을 가져와 정규식 이용 조건(한글만, 학과,학부,전공,과 문자 제외

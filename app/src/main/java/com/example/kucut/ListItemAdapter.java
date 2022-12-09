@@ -1,12 +1,17 @@
 package com.example.kucut;
 
 import android.content.Context;
+import android.net.Uri;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 public class ListItemAdapter extends BaseAdapter {
@@ -38,7 +43,14 @@ public class ListItemAdapter extends BaseAdapter {
 
         }
         TextView nameText = convertView.findViewById(R.id.name);
-
+        ImageView Image = convertView.findViewById(R.id.shortcutImg);
+        String img_path = listItem.getImg();
+       if(!img_path.equals("null")){
+          Uri img =  Uri.parse("file:///" + Environment.getExternalStorageDirectory() + img_path);
+            Image.setImageURI(img);
+        }else{
+            Image.setImageResource(R.mipmap.ic_launcher);
+       }
         nameText.setText(listItem.getName());
 
         return convertView;
