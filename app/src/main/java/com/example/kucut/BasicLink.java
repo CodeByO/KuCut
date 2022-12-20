@@ -1,5 +1,7 @@
 package com.example.kucut;
 
+// 필요한 URL들을 저장하고 있는 곳입니다.
+
 public class BasicLink {
     private BasicLink() {}
     public class FeedLink{

@@ -196,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
 
 
+            // 앱 처음 설치가 되면 기본적인 URL 제공을 위해 DB에 정보 업로드
 
             String SQL_INSERT_MANY = "INSERT INTO shortcut (name,link,image,type) SELECT ";
 
@@ -256,61 +257,6 @@ public class MainActivity extends AppCompatActivity {
 
             db.execSQL(SQL_INSERT_MANY);
             SharedPreferences.Editor editor = pref.edit();
-//            //ListItem에 추가될 요소들
-//            editor.putString("홈페이지_**",BasicLink.FeedLink.HOME_PAGE);
-//            editor.putString("포탈_**",BasicLink.FeedLink.PORTAL_PAGE);
-//            editor.putString("쿠세움_**",BasicLink.FeedLink.KUSEUM_PAGE);
-//            editor.putString("블랙보드_**",BasicLink.FeedLink.BLACKBOARD_PAGE);
-//            editor.putString("세종 학술 정보원_**",BasicLink.FeedLink.ACADEMIC_INFO);
-//            editor.putString("웹메일_**",BasicLink.FeedLink.WEB_MAIL);
-//            editor.putString("성적조회_**",BasicLink.FeedLink.GRADE_LOOKUP);
-//            editor.putString("학사일정_**",BasicLink.FeedLink.ACADEMIC_CALENDAR);
-//            editor.putString("증성서 신청_**",BasicLink.FeedLink.CERTIFICATE_APPLICATION);
-//            editor.putString("참여마당_**",BasicLink.FeedLink.PARTICIPATION_YARD);
-//            editor.putString("세종학생 상담센터_**",BasicLink.FeedLink.COUNSELING_CENTER);
-//            editor.putString("교수학습 지원센터_**",BasicLink.FeedLink.TEACHING_LEARNING);
-//            editor.putString("세종창업 교육센터_**",BasicLink.FeedLink.ENTREPRENEURSHIP_EDUCATION);
-//            editor.putString("대학 일자리 센터_**",BasicLink.FeedLink.JOB_CENTER);
-//            editor.putString("세종 사회 봉사단_**",BasicLink.FeedLink.COMMUNITY_SERVICE);
-//            editor.putString("호연학사_**",BasicLink.FeedLink.DORMITORY_PAGE);
-//            editor.putString("학사 일반 공지_**",BasicLink.FeedLink.GENERAL_NOTICE);
-//            editor.putString("교내 행사 공지_**",BasicLink.FeedLink.EVENT_NOTICE);
-//            editor.putString("코로나 19 공지_**",BasicLink.FeedLink.COVID19_NOTICE);
-//            editor.putString("열람실 현황/배정_**",BasicLink.FeedLink.READING_ROOM);
-//            editor.putString("셔틀버스 시간표_**",BasicLink.FeedLink.SHUTTLE_BUS);
-//            editor.putString("교내 식당 식단표_**",BasicLink.FeedLink.CAMPUS_CAFETERIA);
-//
-//            //Spinner에 추가될 요소들
-//            editor.putString("데이터계산과학전공",BasicLink.DepartmentLink.DATA_CALCULATE);
-//            editor.putString("인공지능사이버보안학과",BasicLink.DepartmentLink.ARTIFICIAL_SECURITY);
-//            editor.putString("디스플레이·반도체물리학부",BasicLink.DepartmentLink.DISPLAY_SEMICONDUCTOR);
-//            editor.putString("신소재화학과",BasicLink.DepartmentLink.MATERIAL_CHEMISTRY);
-//            editor.putString("컴퓨터융합소프트웨어학과",BasicLink.DepartmentLink.COMPUTER_SOFTWARE);
-//            editor.putString("전자정보공학과",BasicLink.DepartmentLink.ELECTRONIC_INFORMATION);
-//            editor.putString("생명정보공학과",BasicLink.DepartmentLink.LIFE_INFORMATION);
-//            editor.putString("식품생명공학과",BasicLink.DepartmentLink.FOOD_LIFE);
-//            editor.putString("전자·기계융합공학과",BasicLink.DepartmentLink.ELECTRONIC_MACHINE);
-//            editor.putString("환경시스템공학과",BasicLink.DepartmentLink.ENVIRONMENT_SYSTEM);
-//            editor.putString("자유공학부",BasicLink.DepartmentLink.FREE_ENGINEER);
-//            editor.putString("미래모빌리티학과",BasicLink.DepartmentLink.FUTURE_MOBILITY);
-//            editor.putString("지능형반도체공학과",BasicLink.DepartmentLink.INTELLIGENT_SEMICONDUCTOR);
-//            editor.putString("정부행정학부",BasicLink.DepartmentLink.GOVERNMENT_ADMINISTRATION);
-//            editor.putString("공공사회학전공",BasicLink.DepartmentLink.PUBLIC_SOCIAL);
-//            editor.putString("통일외교안보전공",BasicLink.DepartmentLink.UNIFICATION_DIPLOMACY);
-//            editor.putString("경제정책학정공",BasicLink.DepartmentLink.ECONOMIC_POLICY);
-//            editor.putString("빅테이터사이언스학부",BasicLink.DepartmentLink.BIG_DATA);
-//            editor.putString("국제스포츠학부",BasicLink.DepartmentLink.INTERNATIONAL_SPORT);
-//            editor.putString("문화유산융합학부",BasicLink.DepartmentLink.CULTURE_HERITAGE);
-//            editor.putString("문화컨텐츠전공",BasicLink.DepartmentLink.CULTURE_CONTENT);
-//            editor.putString("한국학전공",BasicLink.DepartmentLink.KOREA_STUDIES);
-//            editor.putString("중국학전공",BasicLink.DepartmentLink.CHINA_STUDIES);
-//            editor.putString("영미학전공",BasicLink.DepartmentLink.ENGLISH_STUDIES);
-//            editor.putString("독일학전공",BasicLink.DepartmentLink.GERMAN_STUDIES);
-//            editor.putString("글로벌경영전공",BasicLink.DepartmentLink.GLOBAL_MANAGEMENT);
-//            editor.putString("디지털경영전공",BasicLink.DepartmentLink.DIGITAL_MANAGEMENT);
-//            editor.putString("표준지식학과",BasicLink.DepartmentLink.BASIC_INTELLIGENCE);
-//            editor.putString("약학과",BasicLink.DepartmentLink.MEDICINE_STUDIES);
-//            editor.putString("스마트도시학부",BasicLink.DepartmentLink.SMART_CITY);
 
 
             //개인 정보
@@ -336,15 +282,7 @@ public class MainActivity extends AppCompatActivity {
     public void showPasswordDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("비밀번호");
-        //입력창 및 기본 값 추가;
-        /*
-            final EditText et = new EditText(getApplicationContext());
-            .setVIew(et);
-            et.setText(password);
-            확인 버튼 틀릭시
-            et.getText().toString();
-            디비에 업데이트
-         */
+
         builder.setMessage("확인하였습니까?");
         builder.setPositiveButton("확인",
                 new DialogInterface.OnClickListener() {

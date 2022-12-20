@@ -28,6 +28,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+// 프로필 수정 액티비티
+// 프로필 정보는 SharedPreference에 저장하고 있습니다.
+// 비밀번호는 지문인식을 통해 수정이 가능하며, 기존 비밀번호와 EditText의 값이 다를 때만 저장합니다.
 public class EditProfileActivity extends AppCompatActivity {
 
     private Executor executor;

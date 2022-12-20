@@ -28,14 +28,11 @@ import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME
 import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_TYPE;
 
 public class FirstFragment extends Fragment {
-    // Store instance variables
+
     private String title;
     private int page;
     private GridView gridView = null;
-   // SharedPreferences pref = getActivity().getSharedPreferences("pref",Context.MODE_PRIVATE);
-   // SharedPreferences.Editor editor = pref.edit();
-   // SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-    // newInstance constructor for creating fragment with arguments
+
     public static FirstFragment newInstance(int page, String title) {
         FirstFragment fragment = new FirstFragment();
         Bundle args = new Bundle();
@@ -58,7 +55,7 @@ public class FirstFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //SharedPreferences pref = getActivity().getSharedPreferences("pref",Context.MODE_PRIVATE);
+
         DbHelper dbHelper = new DbHelper(getActivity());
         View view = inflater.inflate(R.layout.fragment_first, container, false);
         GridView gridView = (GridView) view.findViewById(R.id.gridView);
@@ -66,13 +63,7 @@ public class FirstFragment extends Fragment {
 
 
 
-//        Map<String,?> keys = pref.getAll();
-//        for(Map.Entry<String,?> entry : keys.entrySet()){
-//            if(entry.getKey().endsWith("_**")){
-//                adapter.addItem(new ListItem(entry.getKey().replace("_**",""), (String)entry.getValue()));
-//            }
-//
-//        }
+
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
@@ -109,7 +100,7 @@ public class FirstFragment extends Fragment {
             adapter.addItem(new ListItem(name,link,img));
 
         }
-        // SharedPreferences에서 모든 데이터 값을 가져와 정규식 이용 조건(한글만, 학과,학부,전공,과 문자 제외
+
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

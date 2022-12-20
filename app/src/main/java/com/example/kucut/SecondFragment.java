@@ -33,16 +33,14 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 public class SecondFragment  extends Fragment {
-    // Store instance variables
+
     private String title;
     private int page;
     private Executor executor;
     private BiometricPrompt biometricPrompt;
     private BiometricPrompt.PromptInfo promptInfo;
 
-   // SharedPreferences pref = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
-   // SharedPreferences.Editor editor = pref.edit();
-    // newInstance constructor for creating fragment with arguments
+
     public static SecondFragment newInstance(int page, String title) {
         SecondFragment fragment = new SecondFragment();
         Bundle args = new Bundle();

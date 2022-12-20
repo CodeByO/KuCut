@@ -48,6 +48,7 @@ import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_LINK
 import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME;
 import static com.example.kucut.SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_TYPE;
 
+
 public class EditShortCutActivity extends AppCompatActivity {
 
     Button NewShortCut;
@@ -77,15 +78,6 @@ public class EditShortCutActivity extends AppCompatActivity {
         NewShortCutDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         NewShortCutDialog.setContentView(R.layout.new_shortcut_dialog);
 
-
-        // SharedPreferences에서 모든 데이터 값을 가져와 정규식 이용 조건(한글만, 학과,학부,전공,과 문자 제외
-        //Map<String,?> keys = pref.getAll();
-        // for(Map.Entry<String,?> entry : keys.entrySet()){
-        // if(entry.getKey().endsWith("_**")){
-        //     adapter.addItem(new ListItem(entry.getKey().replace("_**",""), (String)entry.getValue()));
-        //  }
-
-        //  }
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
@@ -160,7 +152,6 @@ public class EditShortCutActivity extends AppCompatActivity {
         find.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "아직 미구현", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 intent.setType("image/*");
                 startActivityForResult(intent, 1);
@@ -175,9 +166,6 @@ public class EditShortCutActivity extends AppCompatActivity {
                     SharedPreferences.Editor ed = editor;
                     String name = NewName.getText().toString();
                     String link = NewLink.getText().toString();
-
-                    //name = name+"_**";
-                    //ed.putString(name,NewLink.getText().toString());
 
                     ContentValues values = new ContentValues();
                     values.put(SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME, name);
@@ -225,10 +213,6 @@ public class EditShortCutActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String name = ShortCutName;
-//                        name = name + "_**";
-//                        editor.remove(name);
-//                        editor.apply();
-//                        adapter.removeItem(item);
 
                         SQLiteDatabase db = dbHelper.getWritableDatabase();
                         String selection = SqlHandle.FeedShortCut.SHORTCUT_COLUMN_NAME_NAME + " LIKE ?";
@@ -260,9 +244,7 @@ public class EditShortCutActivity extends AppCompatActivity {
             return;
         }
         Uri SelectedFile = data.getData();
-       // img_url = uri_path(SelectedFile);
         img_url="check";
-        //Log.d("img url", SelectedFile.toString());
 
         url = SelectedFile;
         NewImg.setText(url.toString());

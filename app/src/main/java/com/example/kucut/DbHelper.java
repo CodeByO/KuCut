@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+//DB 사용을 위한 소스
+
 public class DbHelper extends SQLiteOpenHelper {
     SqlHandle sqlHandle = new SqlHandle();
     public static final int DATABASE_VERSION = 1;
