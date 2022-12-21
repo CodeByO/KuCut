@@ -34,7 +34,7 @@
         android:background="@drawable/button_back"
         android:drawableLeft="@drawable/add_icon"
         android:text="새로 만들기"
-        android:textColor="#000000"
+        android:textColor="#D7C9B1"
         android:textSize="23dp"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"

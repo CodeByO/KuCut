@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.Kucut" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#D9D9D9</item>
+        <item name="colorPrimary">#7C001A</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->

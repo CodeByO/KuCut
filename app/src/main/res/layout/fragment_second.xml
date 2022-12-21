@@ -89,7 +89,7 @@
         android:layout_marginRight="99dp"
         android:layout_marginBottom="33dp"
         android:text="수정"
-        android:textColor="#0275d8"
+        android:textColor="#D7C9B1"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -106,7 +106,7 @@
         android:layout_marginRight="31dp"
         android:layout_marginBottom="20dp"
         android:text="비밀번호 확인"
-        android:textColor="#0275d8"
+        android:textColor="#D7C9B1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/editProfile"
         app:layout_constraintStart_toStartOf="parent" />
